@@ -13,7 +13,7 @@ public class Person {
 
     }
 
-    public static final Object nullPerson = new Person("","");
+    public static final Person nullPerson = new Person("","");
 
     public String getName () {
         return (Name);

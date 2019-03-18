@@ -1,7 +1,7 @@
 package model;
 
 public class Vehicle {
-    String CountryNumber;
+    String RegistrationNumber;
     String Maker;
     String Pattern;
 
@@ -9,18 +9,18 @@ public class Vehicle {
 
     }
 
-    public Vehicle (String CountryNumber, String Maker, String Pattern) {
-        this.CountryNumber = CountryNumber;
+    public Vehicle (String RegistrationNumber, String Maker, String Pattern) {
+        this.RegistrationNumber = RegistrationNumber;
         this.Maker = Maker;
         this.Pattern = Pattern;
     }
 
-    public String getCountryNumber () {
-        return (CountryNumber);
+    public String getRegistrationNumber () {
+        return (RegistrationNumber);
     }
 
     public void setCountryNumber (String CountryNumber) {
-        this.CountryNumber = CountryNumber;
+        this.RegistrationNumber = CountryNumber;
     }
 
     public String getMaker () {

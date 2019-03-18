@@ -1,32 +1,32 @@
 package model;
 
 public class Space {
-    Object Person;
-    Object Vehicle;
+    Person Person;
+    Vehicle Vehicle;
 
     public Space () {
         Person = new Person();
         Vehicle = new Vehicle();
     }
 
-    public Space (Object Person, Object Vehicle) {
+    public Space (Person Person, Vehicle Vehicle) {
         this.Person = Person;
         this.Vehicle = Vehicle;
     }
 
-    public Object getPerson () {
-        return (Person);
+    public Person getPerson () {
+        return Person;
     }
 
-    public void setPerson (Object Person) {
+    public void setPerson (Person Person) {
         this.Person = Person;
     }
 
-    public Object getVehicle () {
-        return (Vehicle);
+    public Vehicle getVehicle () {
+        return Vehicle;
     }
 
-    public void setVehicle (Object Vehicle) {
+    public void setVehicle (Vehicle Vehicle) {
         this.Vehicle = Vehicle;
     }
 
