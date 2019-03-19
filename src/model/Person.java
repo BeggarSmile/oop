@@ -1,6 +1,8 @@
 package model;
 
+//todo имена переменных, методов, атрибутов - с маленькой буквы
 public class Person {
+    //todo private
     String Name;
     String LastName;
 
@@ -9,17 +11,13 @@ public class Person {
         this.LastName = LastName;
     }
 
-    public Person () {
-
-    }
-
-    public static final Person nullPerson = new Person("","");
+    public static final Person UNKNOWN_PERSON = new Person("","");
 
     public String getName () {
-        return (Name);
+        return Name;
     }
 
     public String getLastName () {
-        return (LastName);
+        return LastName;
     }
 }

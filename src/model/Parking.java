@@ -1,9 +1,9 @@
 package model;
-
+//todo имена переменных, методов, атрибутов - с маленькой буквы
 public class Parking {
-
-    OwnersFloor[] floors = new OwnersFloor[2];
-    int Size = 0;
+    //todo private
+    OwnersFloor[] floors;
+    int Size;
 
     public Parking (int numberFloors) {
         floors = new OwnersFloor[numberFloors];
@@ -11,7 +11,7 @@ public class Parking {
 
     public Parking (OwnersFloor[] floors) {
         Size = floors.length;
-        OwnersFloor[] newFloors = floors;
+        OwnersFloor[] newFloors = floors; //todo скопируй элементы как OwnersFloor
         this.floors = floors;
     }
 
@@ -29,12 +29,12 @@ public class Parking {
     }
 
     public boolean add (int index, OwnersFloor floor) {
-        if (floors[index].equals(null)) {
-            floors[index] = floor;
+        //todo расширить массив если надо - и этот код в метод
+        //todo сдвигать
+        floors[index] = floor;
             Size++;
             return true;
-        }
-        else return false;
+
     }
 
     public OwnersFloor get (int index) {
@@ -49,6 +49,7 @@ public class Parking {
 
     public OwnersFloor remove (int index) {
         OwnersFloor floor = floors[index];
+        //todo System.arraycopy
         for (int i = index; i < Size - 1; i++) {
             floors[i] = floors[i + 1];
         }
@@ -62,11 +63,11 @@ public class Parking {
     }
 
     public OwnersFloor[] getFloors () {
-        return floors;
+        return floors; //todo возвращай копию
     }
 
     public OwnersFloor[] sortedBySizeFloors () {
-        OwnersFloor[] newFloors = floors;
+        OwnersFloor[] newFloors = getFloors();
         for (int j = 0; j < Size - 1; j++) {
             for (int i = 0; i < Size - 1; i++) {
                 if (newFloors[i].Size() > newFloors[i + 1].Size()) {
@@ -86,6 +87,7 @@ public class Parking {
 
     public Vehicle[] getVehicles () {
         int numberVehicle = 0;
+        //todo Floor.VehiclesQuantity()
         for (int i = 0; i < Size; i++) {
             numberVehicle += floors[i].getVehicles().length;
         }
@@ -103,9 +105,7 @@ public class Parking {
 
     public Space getSpace (String RegistationNumber) {
         for (int i = 0; i < Size; i++) {
-            for (int j = 0; j < floors[i].getSpaces().length; j++) {
-                if (floors[i].getSpaces()[j].getVehicle().getRegistrationNumber().equals(RegistationNumber)) return floors[i].getSpaces()[j];
-            }
+            //todo Floor.hasSpace()
         }
         return null;
     }
@@ -113,13 +113,8 @@ public class Parking {
     public Space removeSpace (String RegistrationNumber) {
         Space ans = new Space();
         for (int i = 0; i < Size; i++) {
-            for (int j = 0; j < floors[i].getSpaces().length; j++) {
-                if (floors[i].getSpaces()[j].getVehicle().getRegistrationNumber().equals(RegistrationNumber)) {
-                    ans = floors[i].getSpaces()[j];
-                    floors[i].remove(j);
-                    return ans;
-                }
-            }
+            //todo Floor.remove()
+
         }
         return null;
     }
@@ -127,13 +122,7 @@ public class Parking {
     public Space setSpace (Space space, String RegistrationNumber) {
         Space ans = new Space();
         for (int i = 0; i < Size; i++) {
-            for (int j = 0; j < floors[i].getSpaces().length; j++) {
-                if (floors[i].getSpaces()[j].getVehicle().getRegistrationNumber().equals(RegistrationNumber)) {
-                    ans = floors[i].getSpaces()[j];
-                    floors[i].set(j, space);
-                    return ans;
-                }
-            }
+           //todo Floor.indexOf => set()
         }
         return null;
     }

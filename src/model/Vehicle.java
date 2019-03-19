@@ -1,12 +1,15 @@
 package model;
 
+//todo имена переменных, методов, атрибутов - с маленькой буквы
 public class Vehicle {
+    //todo private
     String RegistrationNumber;
     String Maker;
     String Pattern;
 
     public Vehicle () {
-
+        Maker = "";
+        //todo инициализация пустыми строками
     }
 
     public Vehicle (String RegistrationNumber, String Maker, String Pattern) {

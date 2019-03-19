@@ -1,11 +1,16 @@
 package model;
 
+import java.util.List;
+
+//todo имена переменных, методов, атрибутов - с маленькой буквы
 public class OwnersFloor {
-    private int Size = 0;
-    Space[] Spaces = new Space[4];
+    private int Size;
+    //todo private
+    Space[] Spaces;
 
     public OwnersFloor () {
-        this.Spaces = new Space[16];
+        //todo this()
+        this.Spaces = new Space[16]; //todo литералы - это зло
     }
 
     public OwnersFloor (int NumberSpace) {
@@ -25,27 +30,28 @@ public class OwnersFloor {
             System.arraycopy(Spaces,0,newSpaces ,0, Size);
             Spaces = newSpaces;
             }
-        for (int i = Size; i < Spaces.length; i++) {
-            if (Spaces[i] == null) Spaces[i] = space;
-        }
+        Spaces[Size] = space;
         Size++;
         return true;
     }
 
     public boolean add (int index, Space space) {
-        if (Spaces[index].equals(null)) {
+        //todo расширить массив если надо - и этот код в метод
+            //todo сдвигать
             Spaces[index] = space;
             Size++;
             return true;
-        }
-        else return false;
     }
 
     public Space get (int index) {
         return Spaces[index];
     }
 
+
+
     public Space get (String RegistrationNumber) {
+        //todo цикл до size
+        //todo indexOf(RegistrationNumber)
         for (Space value : Spaces) {
             if (value.getVehicle().getRegistrationNumber().equals(value)) {
                 return value;
@@ -55,22 +61,24 @@ public class OwnersFloor {
     }
 
     public boolean hasSpace (String RegistrationNumber) {
+        //todo indexOf(RegistrationNumber)
         for (int i = 0; i < Size; i++) {
             if (Spaces[i] != null) {
-                if (Spaces[i].getVehicle().getRegistrationNumber() == RegistrationNumber) return true;
+                if (Spaces[i].getVehicle().getRegistrationNumber().equals(RegistrationNumber)) return true;
             }
         }
         return false;
     }
 
     public Space set (int index, Space space) {
-        if (Spaces[index] == null) Size++;
+        Space removedSpace = Spaces[index];
         Spaces[index] = space;
-        return Spaces[index];
+        return removedSpace;
     }
 
     public Space remove (int index) {
         Space space = Spaces[index];
+        //todo System.arraycopy
         for (int i = index; i < Size - 1; i++) {
             Spaces[i] = Spaces[i + 1];
         }
@@ -81,8 +89,9 @@ public class OwnersFloor {
 
     public Space remove (String RegistrationNumber) {
         int token = -1;
+        //todo indexOf(RegistrationNumber)
         for (int i = 0; i < Size; i++) {
-            if (Spaces[i].getVehicle().RegistrationNumber == RegistrationNumber) token = i;
+            if (Spaces[i].getVehicle().RegistrationNumber == RegistrationNumber) token = i; //todo equals()
         }
         Space space = Spaces[token];
         for (int i = token; i < Size - 1; i++) {
@@ -98,16 +107,20 @@ public class OwnersFloor {
     }
 
     public Space[] getSpaces () {
+        //todo возвращай копию Spaces
         if (Size < Spaces.length) System.arraycopy(Spaces, 0, Spaces, 0, Size);
         return Spaces;
     }
 
     public Vehicle[] getVehicles () {
-        if (Size < Spaces.length) System.arraycopy(Spaces, 0, Spaces, 0, Size);
         Vehicle[] Vehicles = new Vehicle[Size];
+        int count = 0;
         for (int i = 0; i < Size; i++) {
-            Vehicles[i] = Spaces[i].getVehicle();
+             if (!Spaces[i].getVehicle().getRegistrationNumber().isEmpty()) {
+                 Vehicles[count] = Spaces[i].getVehicle();
+                 count++;
+             }
         }
-        return Vehicles;
+        return Vehicles; //todo массив из 0-count
     }
 }
