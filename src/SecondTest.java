@@ -46,6 +46,5 @@ public class SecondTest {
         OwnersFloor[] Floors = {OwnersFloor_1, OwnersFloor_2, OwnersFloor_3, OwnersFloor_4, OwnersFloor_5};
         Parking Park = new Parking(Floors);
 
-
     }
 }

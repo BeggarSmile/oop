@@ -1,37 +1,33 @@
 package model;
 
-//todo имена переменных, методов, атрибутов - с маленькой буквы
 public class Space {
-    //todo private
-    Person person;
-    Vehicle Vehicle;
+    private Person person;
+    private Vehicle vehicle;
 
     public Space () {
-        //todo this()
-        person = Person.UNKNOWN_PERSON; //todo безымянная персона
-        Vehicle = new Vehicle();
+        this.person = Person.UNKNOWN_PERSON;
+        this.vehicle = new Vehicle();
     }
 
-    public Space (Person Person, Vehicle Vehicle) {
-        this.person = Person;
-        this.Vehicle = Vehicle;
+    public Space (Person person, Vehicle vehicle) {
+        this.person = person;
+        this.vehicle = vehicle;
     }
 
     public Person getPerson () {
         return person;
     }
 
-    public void setPerson (Person Person) {
-        this.person = Person;
+    public void setPerson (Person person) {
+        this.person = person;
     }
 
     public Vehicle getVehicle () {
-        return Vehicle;
+        return vehicle;
     }
 
-    public void setVehicle (Vehicle Vehicle) {
-        this.Vehicle = Vehicle;
+    public void setVehicle (Vehicle vehicle) {
+        this.vehicle = vehicle;
     }
-
 
 }

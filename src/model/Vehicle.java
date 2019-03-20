@@ -1,44 +1,43 @@
 package model;
 
-//todo имена переменных, методов, атрибутов - с маленькой буквы
 public class Vehicle {
-    //todo private
-    String RegistrationNumber;
-    String Maker;
-    String Pattern;
+    private String registrationNumber;
+    private String maker;
+    private String pattern;
 
     public Vehicle () {
-        Maker = "";
-        //todo инициализация пустыми строками
+        registrationNumber = "";
+        maker = "";
+        pattern = "";
     }
 
-    public Vehicle (String RegistrationNumber, String Maker, String Pattern) {
-        this.RegistrationNumber = RegistrationNumber;
-        this.Maker = Maker;
-        this.Pattern = Pattern;
+    public Vehicle (String registrationNumber, String maker, String pattern) {
+        this.registrationNumber = registrationNumber;
+        this.maker = maker;
+        this.pattern = pattern;
     }
 
     public String getRegistrationNumber () {
-        return (RegistrationNumber);
+        return (registrationNumber);
     }
 
-    public void setCountryNumber (String CountryNumber) {
-        this.RegistrationNumber = CountryNumber;
+    public void setRegistrationNumberNumber (String countryNumber) {
+        this.registrationNumber = countryNumber;
     }
 
     public String getMaker () {
-        return (Maker);
+        return (maker);
     }
 
-    public void setMaker (String Maker) {
-        this.Maker = Maker;
+    public void setMaker (String maker) {
+        this.maker = maker;
     }
 
     public String getPattern () {
-        return (Pattern);
+        return (pattern);
     }
 
-    public void setPattern (String Pattern) {
-        this.Pattern = Pattern;
+    public void setPattern (String pattern) {
+        this.pattern = pattern;
     }
 }

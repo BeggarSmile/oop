@@ -1,126 +1,135 @@
 package model;
 
-import java.util.List;
 
-//todo имена переменных, методов, атрибутов - с маленькой буквы
 public class OwnersFloor {
-    private int Size;
-    //todo private
-    Space[] Spaces;
+    private int size;
+    private Space[] spaces;
+    private static final int SIZE = 16;
+
+    public Space[] increase (Space[] spaces) {
+            Space[] newSpaces = new Space[size * 2];
+            System.arraycopy(spaces,0,newSpaces ,0, size);
+            spaces = newSpaces;
+            return spaces;
+    }
+
+    public int indexOf (String registrationNumber) {
+        for (int i = 0; i < size; i++) {
+            if (spaces[i].getVehicle().getRegistrationNumber().equals(registrationNumber))
+                return i;
+        }
+        return -1;
+    }
+
+    public Vehicle[] vehiclesQuantity(Space[] spaces) {
+        int count = 0;
+        Vehicle[] newVehicles = new Vehicle[spaces.length];
+        for (int i = 0; i < spaces.length; i++) {
+            if (!spaces[i].getVehicle().equals(null)) {
+                newVehicles[count] = spaces[i].getVehicle();
+                count++;
+            }
+        }
+        Vehicle[] vehicles = new Vehicle[count];
+        System.arraycopy(newVehicles, 0, vehicles, 0, count);
+        return vehicles;
+    }
 
     public OwnersFloor () {
-        //todo this()
-        this.Spaces = new Space[16]; //todo литералы - это зло
+        spaces = new Space[SIZE];
     }
 
-    public OwnersFloor (int NumberSpace) {
-        Spaces = new Space[NumberSpace];
+    public OwnersFloor (int numberSpace) {
+        this.spaces = new Space[numberSpace];
     }
 
-    public OwnersFloor (Space[] Spaces) {
-        Size = Spaces.length;
-        Space[] newSpaces = new Space[Size * 2];
-        System.arraycopy(Spaces,0,newSpaces ,0, Size);
-        this.Spaces = newSpaces;
+    public OwnersFloor (Space[] spaces) {
+        size = spaces.length;
+        Space[] newSpaces = new Space[size * 2];
+        System.arraycopy(spaces,0,newSpaces ,0, size);
+        this.spaces = newSpaces;
     }
 
     public boolean add (Space space) {
-        if (Spaces.length == Size) {
-            Space[] newSpaces = new Space[Size * 2];
-            System.arraycopy(Spaces,0,newSpaces ,0, Size);
-            Spaces = newSpaces;
+        if (spaces.length == size) {
+            spaces = increase(spaces);
             }
-        Spaces[Size] = space;
-        Size++;
+        spaces[size] = space;
+        size++;
         return true;
     }
 
     public boolean add (int index, Space space) {
-        //todo расширить массив если надо - и этот код в метод
-            //todo сдвигать
-            Spaces[index] = space;
-            Size++;
-            return true;
+        if (spaces[index].equals(null)) {
+            spaces[index] = space;
+            size++;
+        }
+        else {
+            if (spaces.length == size) {
+                spaces = increase(spaces);
+            }
+            for (int i = size - 1; i >= index; i--) {
+                spaces[i] = spaces[i - 1];
+            }
+            spaces[index] = space;
+        }
+        return true;
     }
 
     public Space get (int index) {
-        return Spaces[index];
+        return spaces[index];
     }
 
-
-
-    public Space get (String RegistrationNumber) {
-        //todo цикл до size
-        //todo indexOf(RegistrationNumber)
-        for (Space value : Spaces) {
-            if (value.getVehicle().getRegistrationNumber().equals(value)) {
-                return value;
-            }
-        }
-        return null;
+    public Space get (String registrationNumber) {
+        int index = indexOf(registrationNumber);
+        if (index != -1) return spaces[index];
+        else return null;
     }
 
-    public boolean hasSpace (String RegistrationNumber) {
-        //todo indexOf(RegistrationNumber)
-        for (int i = 0; i < Size; i++) {
-            if (Spaces[i] != null) {
-                if (Spaces[i].getVehicle().getRegistrationNumber().equals(RegistrationNumber)) return true;
-            }
-        }
+    public boolean hasSpace (String registrationNumber) {
+        if (indexOf(registrationNumber) != -1) return true;
         return false;
     }
 
     public Space set (int index, Space space) {
-        Space removedSpace = Spaces[index];
-        Spaces[index] = space;
+        Space removedSpace = spaces[index];
+        spaces[index] = space;
         return removedSpace;
     }
 
     public Space remove (int index) {
-        Space space = Spaces[index];
-        //todo System.arraycopy
-        for (int i = index; i < Size - 1; i++) {
-            Spaces[i] = Spaces[i + 1];
-        }
-        Spaces[Size - 1] = null;
-        Size--;
+        Space space = spaces[index];
+        System.arraycopy(spaces, index + 1, spaces, index, size - index - 1);
+        spaces[size] = null;
+        size--;
         return space;
     }
 
-    public Space remove (String RegistrationNumber) {
-        int token = -1;
-        //todo indexOf(RegistrationNumber)
-        for (int i = 0; i < Size; i++) {
-            if (Spaces[i].getVehicle().RegistrationNumber == RegistrationNumber) token = i; //todo equals()
+    public Space remove (String registrationNumber) {
+        int token = indexOf(registrationNumber);
+        Space space = spaces[token];
+        for (int i = token; i < size - 1; i++) {
+            spaces[i] = spaces[i + 1];
         }
-        Space space = Spaces[token];
-        for (int i = token; i < Size - 1; i++) {
-            Spaces[i] = Spaces[i + 1];
-        }
-        Spaces[Size - 1] = null;
-        Size--;
+        spaces[size] = null;
+        size--;
         return space;
     }
 
     public int Size () {
-        return Size;
+        return size;
     }
 
     public Space[] getSpaces () {
-        //todo возвращай копию Spaces
-        if (Size < Spaces.length) System.arraycopy(Spaces, 0, Spaces, 0, Size);
-        return Spaces;
+        Space[] newSpace = new Space[size];
+        if (size < spaces.length)
+            System.arraycopy(spaces, 0, newSpace, 0, size);
+        return newSpace;
     }
 
     public Vehicle[] getVehicles () {
-        Vehicle[] Vehicles = new Vehicle[Size];
-        int count = 0;
-        for (int i = 0; i < Size; i++) {
-             if (!Spaces[i].getVehicle().getRegistrationNumber().isEmpty()) {
-                 Vehicles[count] = Spaces[i].getVehicle();
-                 count++;
-             }
-        }
-        return Vehicles; //todo массив из 0-count
+        Space[] newSpace = new Space[size];
+        if (size < spaces.length) System.arraycopy(spaces, 0, newSpace, 0, size);
+        return vehiclesQuantity(newSpace);
     }
 }
