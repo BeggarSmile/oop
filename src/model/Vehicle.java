@@ -1,13 +1,10 @@
 package model;
-//todo имена переменных, методов, атрибутов - с маленькой буквы
 public class Vehicle {
-    //todo private
     private String registrationNumber;
     private String maker;
     private String pattern;
 
     public Vehicle () {
-        //todo инициализация пустыми строками
         registrationNumber = "";
         maker = "";
         pattern = "";
@@ -16,7 +13,7 @@ public class Vehicle {
     public Vehicle (String registrationNumber, String maker, String pattern) {
         this.registrationNumber = registrationNumber;
         this.maker = maker;
-        this.pattern = pattern;
+        this.pattern = pattern; //todo стремное имя
     }
 
     public String getRegistrationNumber () {

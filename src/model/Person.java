@@ -1,8 +1,6 @@
 package model;
-//todo имена переменных, методов, атрибутов - с маленькой буквы
 public class Person {
-    //todo private
-    private String name;
+    private String name; //todo firstName
     private String lastName;
 
     public Person (String name, String lastName) {

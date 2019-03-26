@@ -1,13 +1,11 @@
 package model;
-//todo имена переменных, методов, атрибутов - с маленькой буквы
 public class Space {
-    //todo private
     private Person person;
     private Vehicle vehicle;
 
     public Space () {
-        //todo this()
-        this.person = Person.UNKNOWN_PERSON; //todo безымянная персона
+        //todo вызови второй конструктор this()
+        this.person = Person.UNKNOWN_PERSON;
         this.vehicle = new Vehicle();
     }
 

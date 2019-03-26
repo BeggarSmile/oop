@@ -1,8 +1,6 @@
 package model;
 
 public class Parking {
-    //todo имена переменных, методов, атрибутов - с маленькой буквы
-    //todo private
     private OwnersFloor[] floors;
     private int size;
 
@@ -34,22 +32,15 @@ public class Parking {
     }
 
     public boolean add (int index, OwnersFloor floor) {
-        //todo расширить массив если надо - и этот код в метод
-        //todo сдвигать
-        if (floors[index].equals(null)) {
-            floors[index] = floor;
-            size++;
-        }
-        else {
             if (floors.length == size) {
                 floors = increase(floors);
             }
+            //todo какая-то херня =))) System.arraycopy
             for (int i =  - 1; i >= index; i--) {
                 floors[i] = floors[i - 1];
             }
             floors[index] = floor;
-        }
-        return true;
+
     }
 
     public OwnersFloor get (int index) {
@@ -63,7 +54,6 @@ public class Parking {
     }
 
     public OwnersFloor remove (int index) {
-        //todo System.arraycopy
         OwnersFloor floor = floors[index];
         System.arraycopy(floors, index + 1, floors, index, size - index - 1 );
         floors[size - 1] = null;
@@ -76,13 +66,14 @@ public class Parking {
     }
 
     public OwnersFloor[] getFloors () {
-        //todo возвращай копию
+        //todo возвращай копию массива, а не ссылки
         OwnersFloor[] newFloors = floors;
         return newFloors;
     }
 
     public OwnersFloor[] sortedBySizeFloors () {
-        OwnersFloor[] newFloors = floors;
+
+        OwnersFloor[] newFloors = getFloors();
         for (int j = 0; j < size - 1; j++) {
             for (int i = 0; i < size - 1; i++) {
                 if (newFloors[i].Size() > newFloors[i + 1].Size()) {
@@ -96,51 +87,50 @@ public class Parking {
     }
 
     public Vehicle[] getVehicles () {
-        //todo Floor.VehiclesQuantity()
-        int numberVehicle = 0;
+        int vehiclesQuantity = 0;
         for (int i = 0; i < size; i++) {
-            numberVehicle += floors[i].vehiclesQuantity(floors[i].getSpaces()).length;
+            vehiclesQuantity += floors[i].vehiclesQuantity();
         }
 
-        Vehicle[] newVehicles = new Vehicle[numberVehicle];
-        numberVehicle = 0;
+        Vehicle[] allVehicles = new Vehicle[vehiclesQuantity];
+        vehiclesQuantity = 0;
 
+        Vehicle[] vehicles;
         for (int i = 0; i < size; i++) {
-            System.arraycopy(floors[i].vehiclesQuantity(floors[i].getSpaces()), 0, newVehicles, numberVehicle, floors[i].vehiclesQuantity(floors[i].getSpaces()).length);
-            numberVehicle += floors[i].vehiclesQuantity(floors[i].getSpaces()).length;
+            vehicles = floors[i].getVehicles();
+            //todo System.arraycopy()
         }
 
-        return newVehicles;
+        return allVehicles;
     }
 
     public Space getSpace (String registationNumber) {
-        //todo Floor.hasSpace()
         for (int i = 0; i < size; i++) {
-            if (floors[i].hasSpace(registationNumber)) return floors[i].getSpaces()[floors[i].indexOf(registationNumber)];
+            if (floors[i].hasSpace(registationNumber))
+                return floors[i].get(registationNumber);
         }
         return null;
     }
 
     public Space removeSpace (String registrationNumber) {
-        Space ans = new Space();
-        //todo Floor.remove()
+        Space ans = null; //todo имя - гавно
         for (int i = 0; i < size; i++) {
             Space removedSpace = floors[i].remove(registrationNumber);
             if (removedSpace != null) return removedSpace;
         }
-        return null;
+        return ans;
     }
 
     public Space setSpace (Space space, String registrationNumber) {
-        Space ans = new Space();
+        Space ans = null; //todo имя - гавно
         //todo Floor.indexOf => set()
         for (int i = 0; i < size; i++) {
-            if (floors[i].indexOf(registrationNumber) != -1) {
-                ans = floors[i].getSpaces()[floors[i].indexOf(registrationNumber)];
-                floors[i].set(i, space);
+            index = floors[i].indexOf(registrationNumber);
+            if ( != -1) {
+                ans = floors[i].set(i, space);
                 return ans;
             }
         }
-        return null;
+        return ans;
     }
 }
