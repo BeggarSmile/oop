@@ -1,11 +1,13 @@
 package model;
-
+//todo имена переменных, методов, атрибутов - с маленькой буквы
 public class Vehicle {
+    //todo private
     private String registrationNumber;
     private String maker;
     private String pattern;
 
     public Vehicle () {
+        //todo инициализация пустыми строками
         registrationNumber = "";
         maker = "";
         pattern = "";

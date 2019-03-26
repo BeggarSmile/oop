@@ -2,6 +2,8 @@ package model;
 
 
 public class OwnersFloor {
+    //todo имена переменных, методов, атрибутов - с маленькой буквы
+    //todo private
     private int size;
     private Space[] spaces;
     private static final int SIZE = 16;
@@ -34,9 +36,10 @@ public class OwnersFloor {
         System.arraycopy(newVehicles, 0, vehicles, 0, count);
         return vehicles;
     }
-
+    //todo this()
     public OwnersFloor () {
         spaces = new Space[SIZE];
+        //todo литералы - это зло
     }
 
     public OwnersFloor (int numberSpace) {
@@ -60,6 +63,8 @@ public class OwnersFloor {
     }
 
     public boolean add (int index, Space space) {
+        //todo расширить массив если надо - и этот код в метод
+        //todo сдвигать
         if (spaces[index].equals(null)) {
             spaces[index] = space;
             size++;
@@ -81,12 +86,15 @@ public class OwnersFloor {
     }
 
     public Space get (String registrationNumber) {
+        //todo цикл до size
+        //todo indexOf(RegistrationNumber)
         int index = indexOf(registrationNumber);
         if (index != -1) return spaces[index];
         else return null;
     }
 
     public boolean hasSpace (String registrationNumber) {
+        //todo indexOf(RegistrationNumber)
         if (indexOf(registrationNumber) != -1) return true;
         return false;
     }
@@ -99,6 +107,7 @@ public class OwnersFloor {
 
     public Space remove (int index) {
         Space space = spaces[index];
+        //todo System.arraycopy
         System.arraycopy(spaces, index + 1, spaces, index, size - index - 1);
         spaces[size] = null;
         size--;
@@ -106,6 +115,7 @@ public class OwnersFloor {
     }
 
     public Space remove (String registrationNumber) {
+        //todo indexOf(RegistrationNumber)
         int token = indexOf(registrationNumber);
         Space space = spaces[token];
         for (int i = token; i < size - 1; i++) {
@@ -121,6 +131,7 @@ public class OwnersFloor {
     }
 
     public Space[] getSpaces () {
+        //todo возвращай копию Spaces
         Space[] newSpace = new Space[size];
         if (size < spaces.length)
             System.arraycopy(spaces, 0, newSpace, 0, size);
@@ -131,5 +142,6 @@ public class OwnersFloor {
         Space[] newSpace = new Space[size];
         if (size < spaces.length) System.arraycopy(spaces, 0, newSpace, 0, size);
         return vehiclesQuantity(newSpace);
+        //todo массив из 0-count
     }
 }
