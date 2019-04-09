@@ -10,10 +10,10 @@ public class Vehicle {
         pattern = "";
     }
 
-    public Vehicle (String registrationNumber, String maker, String pattern) {
+    public Vehicle (String registrationNumber, String maker, String model) {
         this.registrationNumber = registrationNumber;
         this.maker = maker;
-        this.pattern = pattern; //todo стремное имя
+        this.pattern = model; //todo стремное имя - done
     }
 
     public String getRegistrationNumber () {

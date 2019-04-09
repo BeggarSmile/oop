@@ -1,33 +1,15 @@
 package model;
-public class Space {
-    private Person person;
-    private Vehicle vehicle;
 
-    public Space () {
-        //todo вызови второй конструктор this()
-        this.person = Person.UNKNOWN_PERSON;
-        this.vehicle = new Vehicle();
-    }
+public interface Space {
 
-    public Space (Person person, Vehicle vehicle) {
-        this.person = person;
-        this.vehicle = vehicle;
-    }
+    Vehicle getVehicle();
 
-    public Person getPerson () {
-        return person;
-    }
+    Person getPerson();
 
-    public void setPerson (Person person) {
-        this.person = person;
-    }
+    void setVehicle(Vehicle vehicle);
 
-    public Vehicle getVehicle () {
-        return vehicle;
-    }
+    void setPerson(Person person);
 
-    public void setVehicle (Vehicle vehicle) {
-        this.vehicle = vehicle;
-    }
+    boolean isEmpty();
 
 }

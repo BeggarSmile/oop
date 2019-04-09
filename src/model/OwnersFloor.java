@@ -1,15 +1,13 @@
 package model;
 
 
-import java.util.Objects;
-
-public class OwnersFloor {
+public class OwnersFloor implements Floor {
     private int size;
-    private Space[] spaces;
-    private static final int SIZE = 16; //todo плохое имя
+    private RentedSpace[] spaces;
+    private static final int CAPACITY_DEFAULT = 16; //todo плохое имя - done
 
-    public Space[] increase (Space[] spaces) {
-            Space[] newSpaces = new Space[size * 2];
+    public RentedSpace[] increase (RentedSpace[] spaces) {
+            RentedSpace[] newSpaces = new RentedSpace[size * 2];
             System.arraycopy(spaces,0,newSpaces ,0, size);
             spaces = newSpaces;
             return spaces;
@@ -26,28 +24,28 @@ public class OwnersFloor {
     public int vehiclesQuantity() {
         int count = 0;
         for (int i = 0; i < size; i++) {
-            if (spaces[i].getVehicle() != null) { //todo эта проверка будет в методе Space.isEmpty()
+            if (spaces[i].isEmpty()) { //todo эта проверка будет в методе RentedSpace.isEmpty() - done
                 count++;
             }
         }
         return count;
     }
     public OwnersFloor () {
-        this(SIZE);
+        this(CAPACITY_DEFAULT);
     }
 
     public OwnersFloor (int numberSpace) {
-        this.spaces = new Space[numberSpace];
+        this.spaces = new RentedSpace[numberSpace];
     }
 
-    public OwnersFloor (Space[] spaces) {
+    public OwnersFloor (RentedSpace[] spaces) {
         size = spaces.length;
-        Space[] newSpaces = new Space[size * 2];
+        RentedSpace[] newSpaces = new RentedSpace[size * 2];
         System.arraycopy(spaces,0,newSpaces ,0, size);
         this.spaces = newSpaces;
     }
 
-    public boolean add (Space space) {
+    public boolean add (RentedSpace space) {
         if (spaces.length == size) {
             spaces = increase(spaces);
             }
@@ -56,24 +54,22 @@ public class OwnersFloor {
         return true;
     }
 
-    public boolean add (int index, Space space) {
+    public boolean add (int index, RentedSpace space) {
             if (spaces.length == size) {
                 spaces = increase(spaces);
             }
-            //todo System.arraycopy
-            for (int i = size - 1; i >= index; i--) {
-                spaces[i] = spaces[i - 1];
-            }
+            //todo System.arraycopy - done
+            System.arraycopy(spaces, index, spaces, index + 1, size - index - 1);
             spaces[index] = space;
 
         return true;
     }
 
-    public Space get (int index) {
+    public RentedSpace get (int index) {
         return spaces[index];
     }
 
-    public Space get (String registrationNumber) {
+    public RentedSpace get (String registrationNumber) {
         int index = indexOf(registrationNumber);
         if (index != -1) return spaces[index];
         return null;
@@ -83,38 +79,32 @@ public class OwnersFloor {
         return indexOf(registrationNumber) != -1;
     }
 
-    public Space set (int index, Space space) {
-        Space removedSpace = spaces[index];
+    public RentedSpace set (int index, RentedSpace space) {
+        RentedSpace removedSpace = spaces[index];
         spaces[index] = space;
         return removedSpace;
     }
 
-    public Space remove (int index) {
-        Space space = spaces[index];
+    public RentedSpace remove (int index) {
+        RentedSpace space = spaces[index];
         System.arraycopy(spaces, index + 1, spaces, index, size - index - 1);
         size--;
         spaces[size] = null;
         return space;
     }
 
-    public Space remove (String registrationNumber) {
+    public RentedSpace remove (String registrationNumber) {
         int index = indexOf(registrationNumber);
-        //todo а дальше идет дубль remove(index) - вызываей его
-        Space space = spaces[index];
-        for (int i = index; i < size - 1; i++) {
-            spaces[i] = spaces[i + 1];
-        }
-        spaces[size] = null;
-        size--;
-        return space;
+        //todo а дальше идет дубль remove(index) - вызываей его - done
+        return remove(index);
     }
 
-    public int Size () {
+    public int size() {
         return size;
     }
 
-    public Space[] getSpaces () {
-        Space[] newSpace = new Space[size];
+    public RentedSpace[] getSpaces () {
+        RentedSpace[] newSpace = new RentedSpace[size];
         System.arraycopy(spaces, 0, newSpace, 0, size);
         return newSpace;
     }
@@ -123,7 +113,7 @@ public class OwnersFloor {
         int count = 0;
         Vehicle[] newVehicles = new Vehicle[spaces.length];
         for (int i = 0; i < size; i++) {
-            if (spaces[i].getVehicle() != null) { //todo эта проверка будет в методе Space.isEmpty()
+            if (spaces[i].isEmpty()) { //todo эта проверка будет в методе RentedSpace.isEmpty() - done
                 newVehicles[count] = spaces[i].getVehicle();
                 count++;
             }

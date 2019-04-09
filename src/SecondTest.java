@@ -1,7 +1,5 @@
 import model.*;
 
-import java.sql.SQLOutput;
-
 public class SecondTest {
     public static void main (String[] args) {
         System.out.println("Я сделяль!");
@@ -23,24 +21,24 @@ public class SecondTest {
         Vehicle Vehicle_4 = new Vehicle("RegNumber4", "Maker4", "Pattern4");
         Vehicle Vehicle_5 = new Vehicle("RegNumber5", "Maker5", "Pattern5");
 
-        //Tests class Space
-        Space Space_1 = new Space(Person_1, Vehicle_1);
-        Space Space_2 = new Space(Person_2, Vehicle_2);
-        Space Space_3 = new Space(Person_3, Vehicle_3);
-        Space Space_4 = new Space(Person_4, Vehicle_4);
-        Space Space_5 = new Space(Person_5, Vehicle_5);
+        //Tests class RentedSpace
+        RentedSpace rentedSpace_1 = new RentedSpace(Person_1, Vehicle_1);
+        RentedSpace rentedSpace_2 = new RentedSpace(Person_2, Vehicle_2);
+        RentedSpace rentedSpace_3 = new RentedSpace(Person_3, Vehicle_3);
+        RentedSpace rentedSpace_4 = new RentedSpace(Person_4, Vehicle_4);
+        RentedSpace rentedSpace_5 = new RentedSpace(Person_5, Vehicle_5);
 
         //Tests class OwnersFloor
-        Space[] Spaces_1 = {Space_1, Space_2, Space_3, Space_4, Space_5};
-        OwnersFloor OwnersFloor_1 = new OwnersFloor(Spaces_1);
-        Space[] Spaces_2 = {Space_1, Space_2, Space_3, Space_4, Space_5};
-        OwnersFloor OwnersFloor_2 = new OwnersFloor(Spaces_2);
-        Space[] Spaces_3 = {Space_1, Space_2, Space_3, Space_4, Space_5};
-        OwnersFloor OwnersFloor_3 = new OwnersFloor(Spaces_3);
-        Space[] Spaces_4 = {Space_1, Space_2, Space_3, Space_4, Space_5};
-        OwnersFloor OwnersFloor_4 = new OwnersFloor(Spaces_4);
-        Space[] Spaces_5 = {Space_1, Space_2, Space_3, Space_4, Space_5};
-        OwnersFloor OwnersFloor_5 = new OwnersFloor(Spaces_5);
+        RentedSpace[] spaces_1 = {rentedSpace_1, rentedSpace_2, rentedSpace_3, rentedSpace_4, rentedSpace_5};
+        OwnersFloor OwnersFloor_1 = new OwnersFloor(spaces_1);
+        RentedSpace[] spaces_2 = {rentedSpace_1, rentedSpace_2, rentedSpace_3, rentedSpace_4, rentedSpace_5};
+        OwnersFloor OwnersFloor_2 = new OwnersFloor(spaces_2);
+        RentedSpace[] spaces_3 = {rentedSpace_1, rentedSpace_2, rentedSpace_3, rentedSpace_4, rentedSpace_5};
+        OwnersFloor OwnersFloor_3 = new OwnersFloor(spaces_3);
+        RentedSpace[] spaces_4 = {rentedSpace_1, rentedSpace_2, rentedSpace_3, rentedSpace_4, rentedSpace_5};
+        OwnersFloor OwnersFloor_4 = new OwnersFloor(spaces_4);
+        RentedSpace[] spaces_5 = {rentedSpace_1, rentedSpace_2, rentedSpace_3, rentedSpace_4, rentedSpace_5};
+        OwnersFloor OwnersFloor_5 = new OwnersFloor(spaces_5);
 
         //Tests class Parking
         OwnersFloor[] Floors = {OwnersFloor_1, OwnersFloor_2, OwnersFloor_3, OwnersFloor_4, OwnersFloor_5};

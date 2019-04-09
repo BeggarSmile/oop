@@ -18,8 +18,9 @@ public class Parking {
     public Parking (OwnersFloor[] floors) {
         size = floors.length;
         OwnersFloor[] newFloors = floors;
-        //todo скопируй элементы как OwnersFloor
-        this.floors = floors;
+        //todo скопируй элементы как OwnersFloor - done
+        System.arraycopy(floors, 0 , newFloors, 0, size);
+        this.floors = newFloors;
     }
 
     public boolean add (OwnersFloor floor) {
@@ -35,12 +36,11 @@ public class Parking {
             if (floors.length == size) {
                 floors = increase(floors);
             }
-            //todo какая-то херня =))) System.arraycopy
-            for (int i =  - 1; i >= index; i--) {
-                floors[i] = floors[i - 1];
-            }
+            //todo какая-то херня =))) System.arraycopy - done
+            System.arraycopy(floors, index, floors, index + 1, size - index - 1);
             floors[index] = floor;
-
+            size++;
+            return true;
     }
 
     public OwnersFloor get (int index) {
@@ -66,8 +66,9 @@ public class Parking {
     }
 
     public OwnersFloor[] getFloors () {
-        //todo возвращай копию массива, а не ссылки
-        OwnersFloor[] newFloors = floors;
+        //todo возвращай копию массива, а не ссылки - done
+        OwnersFloor[] newFloors = new OwnersFloor[size];
+        System.arraycopy(floors, 0 , newFloors, 0 , size);
         return newFloors;
     }
 
@@ -76,7 +77,7 @@ public class Parking {
         OwnersFloor[] newFloors = getFloors();
         for (int j = 0; j < size - 1; j++) {
             for (int i = 0; i < size - 1; i++) {
-                if (newFloors[i].Size() > newFloors[i + 1].Size()) {
+                if (newFloors[i].size() > newFloors[i + 1].size()) {
                     OwnersFloor newFloor = newFloors[i];
                     newFloors[i] = newFloors[i + 1];
                     newFloors[i + 1] = newFloor;
@@ -98,13 +99,15 @@ public class Parking {
         Vehicle[] vehicles;
         for (int i = 0; i < size; i++) {
             vehicles = floors[i].getVehicles();
-            //todo System.arraycopy()
+            System.arraycopy(vehicles, 0, allVehicles, vehiclesQuantity, vehicles.length);
+            vehiclesQuantity += vehicles.length;
+            //todo System.arraycopy() - done
         }
 
         return allVehicles;
     }
 
-    public Space getSpace (String registationNumber) {
+    public RentedSpace getSpace (String registationNumber) {
         for (int i = 0; i < size; i++) {
             if (floors[i].hasSpace(registationNumber))
                 return floors[i].get(registationNumber);
@@ -112,25 +115,24 @@ public class Parking {
         return null;
     }
 
-    public Space removeSpace (String registrationNumber) {
-        Space ans = null; //todo имя - гавно
+    public RentedSpace removeSpace (String registrationNumber) {
+        RentedSpace removedSpace = null; //todo имя - гавно - done
         for (int i = 0; i < size; i++) {
-            Space removedSpace = floors[i].remove(registrationNumber);
+            removedSpace = floors[i].remove(registrationNumber);
             if (removedSpace != null) return removedSpace;
         }
-        return ans;
+        return removedSpace;
     }
 
-    public Space setSpace (Space space, String registrationNumber) {
-        Space ans = null; //todo имя - гавно
-        //todo Floor.indexOf => set()
+    public RentedSpace setSpace (RentedSpace space, String registrationNumber) {
+        RentedSpace settedSpace = null; //todo имя - гавно - done
+        //todo Floor.indexOf => set() - done
         for (int i = 0; i < size; i++) {
-            index = floors[i].indexOf(registrationNumber);
-            if ( != -1) {
-                ans = floors[i].set(i, space);
-                return ans;
+            if (floors[i].indexOf(registrationNumber) != -1) {
+                settedSpace = floors[i].set(i, space);
+                return settedSpace;
             }
         }
-        return ans;
+        return settedSpace;
     }
 }
