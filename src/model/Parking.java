@@ -18,7 +18,6 @@ public class Parking {
     public Parking (OwnersFloor[] floors) {
         size = floors.length;
         OwnersFloor[] newFloors = floors;
-        //todo скопируй элементы как OwnersFloor - done
         System.arraycopy(floors, 0 , newFloors, 0, size);
         this.floors = newFloors;
     }
@@ -36,7 +35,6 @@ public class Parking {
             if (floors.length == size) {
                 floors = increase(floors);
             }
-            //todo какая-то херня =))) System.arraycopy - done
             System.arraycopy(floors, index, floors, index + 1, size - index - 1);
             floors[index] = floor;
             size++;
@@ -66,7 +64,6 @@ public class Parking {
     }
 
     public OwnersFloor[] getFloors () {
-        //todo возвращай копию массива, а не ссылки - done
         OwnersFloor[] newFloors = new OwnersFloor[size];
         System.arraycopy(floors, 0 , newFloors, 0 , size);
         return newFloors;
@@ -101,7 +98,6 @@ public class Parking {
             vehicles = floors[i].getVehicles();
             System.arraycopy(vehicles, 0, allVehicles, vehiclesQuantity, vehicles.length);
             vehiclesQuantity += vehicles.length;
-            //todo System.arraycopy() - done
         }
 
         return allVehicles;
@@ -116,23 +112,24 @@ public class Parking {
     }
 
     public RentedSpace removeSpace (String registrationNumber) {
-        RentedSpace removedSpace = null; //todo имя - гавно - done
+        RentedSpace removedSpace = null;
         for (int i = 0; i < size; i++) {
-            removedSpace = floors[i].remove(registrationNumber);
-            if (removedSpace != null) return removedSpace;
+            if (floors[i].hasSpace(registrationNumber)) {
+                removedSpace = floors[i].remove(registrationNumber);
+                break;
+            }
         }
         return removedSpace;
     }
 
     public RentedSpace setSpace (RentedSpace space, String registrationNumber) {
-        RentedSpace settedSpace = null; //todo имя - гавно - done
-        //todo Floor.indexOf => set() - done
+        RentedSpace oldSpace = null;
         for (int i = 0; i < size; i++) {
             if (floors[i].indexOf(registrationNumber) != -1) {
-                settedSpace = floors[i].set(i, space);
-                return settedSpace;
+                oldSpace = floors[i].set(i, space);
+                return oldSpace;
             }
         }
-        return settedSpace;
+        return oldSpace;
     }
 }

@@ -4,8 +4,7 @@ public class RentedSpace implements Space {
     private Vehicle vehicle;
 
     public RentedSpace() {
-        //todo вызови второй конструктор this() - done
-        this(Person.UNKNOWN_PERSON, new Vehicle());
+        this(Person.UNKNOWN_PERSON, null);
     }
 
     public RentedSpace(Person person, Vehicle vehicle) {
@@ -30,7 +29,7 @@ public class RentedSpace implements Space {
     }
 
     public boolean isEmpty () {
-        return (this.vehicle == null || this.vehicle.getRegistrationNumber().equals(""));
+        return (this.vehicle == null || this.vehicle.getRegistrationNumber().isEmpty());
     }
 
 }

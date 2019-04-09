@@ -2,8 +2,9 @@ package model;
 public class Vehicle {
     private String registrationNumber;
     private String maker;
-    private String pattern;
+    private String pattern;//todo стремное имя - done
 
+    //todo конструктор вызви другой
     public Vehicle () {
         registrationNumber = "";
         maker = "";
@@ -13,7 +14,7 @@ public class Vehicle {
     public Vehicle (String registrationNumber, String maker, String model) {
         this.registrationNumber = registrationNumber;
         this.maker = maker;
-        this.pattern = model; //todo стремное имя - done
+        this.pattern = model;
     }
 
     public String getRegistrationNumber () {
