@@ -4,7 +4,7 @@ package model;
 public class OwnersFloor implements Floor {
     private int size;
     private RentedSpace[] spaces;
-    private static final int CAPACITY_DEFAULT = 16; //todo плохое имя - done
+    private static final int CAPACITY_DEFAULT = 16;
 
     public RentedSpace[] increase (RentedSpace[] spaces) {
             RentedSpace[] newSpaces = new RentedSpace[size * 2];
@@ -24,7 +24,7 @@ public class OwnersFloor implements Floor {
     public int vehiclesQuantity() {
         int count = 0;
         for (int i = 0; i < size; i++) {
-            if (spaces[i].isEmpty()) { //todo эта проверка будет в методе RentedSpace.isEmpty() - done
+            if (spaces[i].isEmpty()) {
                 count++;
             }
         }
@@ -58,7 +58,6 @@ public class OwnersFloor implements Floor {
             if (spaces.length == size) {
                 spaces = increase(spaces);
             }
-            //todo System.arraycopy - done
             System.arraycopy(spaces, index, spaces, index + 1, size - index - 1);
             spaces[index] = space;
 
@@ -95,7 +94,6 @@ public class OwnersFloor implements Floor {
 
     public RentedSpace remove (String registrationNumber) {
         int index = indexOf(registrationNumber);
-        //todo а дальше идет дубль remove(index) - вызываей его - done
         return remove(index);
     }
 
@@ -113,7 +111,7 @@ public class OwnersFloor implements Floor {
         int count = 0;
         Vehicle[] newVehicles = new Vehicle[spaces.length];
         for (int i = 0; i < size; i++) {
-            if (spaces[i].isEmpty()) { //todo эта проверка будет в методе RentedSpace.isEmpty() - done
+            if (spaces[i].isEmpty()) {
                 newVehicles[count] = spaces[i].getVehicle();
                 count++;
             }

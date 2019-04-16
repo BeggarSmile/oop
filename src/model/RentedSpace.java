@@ -4,7 +4,6 @@ public class RentedSpace implements Space {
     private Vehicle vehicle;
 
     public RentedSpace() {
-        //todo вызови второй конструктор this() - done
         this(Person.UNKNOWN_PERSON, new Vehicle());
     }
 

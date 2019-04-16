@@ -1,6 +1,5 @@
 package model;
 public class Person {
-    //todo firstName - done
     private String firstName;
     private String lastName;
 

@@ -2,18 +2,16 @@ package model;
 public class Vehicle {
     private String registrationNumber;
     private String maker;
-    private String pattern;
+    private String model;
 
     public Vehicle () {
-        registrationNumber = "";
-        maker = "";
-        pattern = "";
+        this("", "", "");
     }
 
     public Vehicle (String registrationNumber, String maker, String model) {
         this.registrationNumber = registrationNumber;
         this.maker = maker;
-        this.pattern = model; //todo стремное имя - done
+        this.model = model;
     }
 
     public String getRegistrationNumber () {
@@ -32,11 +30,11 @@ public class Vehicle {
         this.maker = maker;
     }
 
-    public String getPattern () {
-        return (pattern);
+    public String getModel() {
+        return (model);
     }
 
-    public void setPattern (String pattern) {
-        this.pattern = pattern;
+    public void setModel(String model) {
+        this.model = model;
     }
 }
