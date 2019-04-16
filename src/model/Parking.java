@@ -114,8 +114,10 @@ public class Parking {
     public RentedSpace removeSpace (String registrationNumber) {
         RentedSpace removedSpace = null;
         for (int i = 0; i < size; i++) {
-            removedSpace = floors[i].remove(registrationNumber);
-            if (removedSpace != null) return removedSpace;
+            if (floors[i].hasSpace(registrationNumber)) {
+                removedSpace = floors[i].remove(registrationNumber);
+                break;
+            }
         }
         return removedSpace;
     }

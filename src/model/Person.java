@@ -8,11 +8,6 @@ public class Person {
         this.lastName = lastName;
     }
 
-    public Person () {
-        this.firstName = UNKNOWN_PERSON.firstName;
-        this.lastName = UNKNOWN_PERSON.lastName;
-    }
-
     public static final Person UNKNOWN_PERSON = new Person("","");
 
     public String getFirstName() {

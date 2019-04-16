@@ -80,7 +80,7 @@ public class RentedSpacesFloor implements Floor{
 
     //todo need complete
     public RentedSpace get(int index) {
-        return getNode(index).getValue();
+        return null;
     }
 
     //todo need complete
