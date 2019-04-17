@@ -1,25 +1,29 @@
 package model;
 
 public interface Floor {
-    boolean add(RentedSpace space);
+    boolean add(Space space);
 
-    boolean add(int index, RentedSpace space);
+    boolean add(int index, Space space);
 
-    RentedSpace get(int index);
+    Space get(int index);
 
-    RentedSpace get(String registrationNumber);
+    Space get(String registrationNumber);
 
     boolean hasSpace(String registrationNumber);
 
-    RentedSpace set(int index, RentedSpace space);
+    Space set(int index, Space space);
 
-    RentedSpace remove(int index);
+    Space remove(int index);
 
-    RentedSpace remove(String registrationNumber);
+    Space remove(String registrationNumber);
 
     int size();
 
-    RentedSpace[] getSpaces();
+    Space[] getSpaces();
 
     Vehicle[] getVehicles();
+
+    int vehiclesQuantity();
+
+    int indexOf(String registrationNumber);
 }

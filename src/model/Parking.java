@@ -1,28 +1,28 @@
 package model;
 
 public class Parking {
-    private OwnersFloor[] floors;
+    private Floor[] floors;
     private int size;
 
-    public OwnersFloor[] increase (OwnersFloor[] floors) {
-        OwnersFloor[] newFloor = new OwnersFloor[size * 2];
+    public Floor[] increase (Floor[] floors) {
+        Floor[] newFloor = new Floor[size * 2];
         System.arraycopy(floors,0,newFloor ,0, size);
         floors = newFloor;
         return floors;
     }
 
     public Parking (int numberFloors) {
-        floors = new OwnersFloor[numberFloors];
+        floors = new Floor[numberFloors];
     }
 
-    public Parking (OwnersFloor[] floors) {
+    public Parking (Floor[] floors) {
         size = floors.length;
-        OwnersFloor[] newFloors = floors;
+        Floor[] newFloors = floors;
         System.arraycopy(floors, 0 , newFloors, 0, size);
         this.floors = newFloors;
     }
 
-    public boolean add (OwnersFloor floor) {
+    public boolean add (Floor floor) {
         if (floors.length == size) {
             floors = increase(floors);
         }
@@ -31,7 +31,7 @@ public class Parking {
         return true;
     }
 
-    public boolean add (int index, OwnersFloor floor) {
+    public boolean add (int index, Floor floor) {
             if (floors.length == size) {
                 floors = increase(floors);
             }
@@ -41,18 +41,18 @@ public class Parking {
             return true;
     }
 
-    public OwnersFloor get (int index) {
+    public Floor get (int index) {
         return floors[index];
     }
 
-    public OwnersFloor set (int index, OwnersFloor floor) {
-        OwnersFloor ans = floors[index];
+    public Floor set (int index, Floor floor) {
+        Floor oldFloor = floors[index];
         floors[index] = floor;
-        return ans;
+        return oldFloor;
     }
 
-    public OwnersFloor remove (int index) {
-        OwnersFloor floor = floors[index];
+    public Floor remove (int index) {
+        Floor floor = floors[index];
         System.arraycopy(floors, index + 1, floors, index, size - index - 1 );
         floors[size - 1] = null;
         size--;
@@ -63,19 +63,19 @@ public class Parking {
         return size;
     }
 
-    public OwnersFloor[] getFloors () {
-        OwnersFloor[] newFloors = new OwnersFloor[size];
+    public Floor[] getFloors () {
+        Floor[] newFloors = new Floor[size];
         System.arraycopy(floors, 0 , newFloors, 0 , size);
         return newFloors;
     }
 
-    public OwnersFloor[] sortedBySizeFloors () {
+    public Floor[] sortedBySizeFloors () {
 
-        OwnersFloor[] newFloors = getFloors();
+        Floor[] newFloors = getFloors();
         for (int j = 0; j < size - 1; j++) {
             for (int i = 0; i < size - 1; i++) {
                 if (newFloors[i].size() > newFloors[i + 1].size()) {
-                    OwnersFloor newFloor = newFloors[i];
+                    Floor newFloor = newFloors[i];
                     newFloors[i] = newFloors[i + 1];
                     newFloors[i + 1] = newFloor;
                 }
@@ -103,7 +103,7 @@ public class Parking {
         return allVehicles;
     }
 
-    public RentedSpace getSpace (String registationNumber) {
+    public Space getSpace (String registationNumber) {
         for (int i = 0; i < size; i++) {
             if (floors[i].hasSpace(registationNumber))
                 return floors[i].get(registationNumber);
@@ -111,8 +111,8 @@ public class Parking {
         return null;
     }
 
-    public RentedSpace removeSpace (String registrationNumber) {
-        RentedSpace removedSpace = null;
+    public Space removeSpace (String registrationNumber) {
+        Space removedSpace = null;
         for (int i = 0; i < size; i++) {
             if (floors[i].hasSpace(registrationNumber)) {
                 removedSpace = floors[i].remove(registrationNumber);
@@ -122,8 +122,8 @@ public class Parking {
         return removedSpace;
     }
 
-    public RentedSpace setSpace (RentedSpace space, String registrationNumber) {
-        RentedSpace oldSpace = null;
+    public Space setSpace (Space space, String registrationNumber) {
+        Space oldSpace = null;
         for (int i = 0; i < size; i++) {
             if (floors[i].indexOf(registrationNumber) != -1) {
                 oldSpace = floors[i].set(i, space);

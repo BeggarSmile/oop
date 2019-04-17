@@ -15,8 +15,10 @@ public class Node {
         this(value, null, null);
     }
 
-    public void setValue(Space value) {
+    public Space setValue(Space value) {
+        Space oldSpace = value;
         this.value = value;
+        return oldSpace;
     }
 
     public void setNext(Node next) {

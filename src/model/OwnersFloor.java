@@ -3,11 +3,11 @@ package model;
 
 public class OwnersFloor implements Floor {
     private int size;
-    private RentedSpace[] spaces;
+    private Space[] spaces;
     private static final int CAPACITY_DEFAULT = 16;
 
-    public RentedSpace[] increase (RentedSpace[] spaces) {
-            RentedSpace[] newSpaces = new RentedSpace[size * 2];
+    public Space[] increase (Space[] spaces) {
+            Space[] newSpaces = new RentedSpace[size * 2];
             System.arraycopy(spaces,0,newSpaces ,0, size);
             spaces = newSpaces;
             return spaces;
@@ -30,22 +30,23 @@ public class OwnersFloor implements Floor {
         }
         return count;
     }
+
     public OwnersFloor () {
         this(CAPACITY_DEFAULT);
     }
 
     public OwnersFloor (int numberSpace) {
-        this.spaces = new RentedSpace[numberSpace];
+        this.spaces = new Space[numberSpace];
     }
 
-    public OwnersFloor (RentedSpace[] spaces) {
+    public OwnersFloor (Space[] spaces) {
         size = spaces.length;
-        RentedSpace[] newSpaces = new RentedSpace[size * 2];
+        Space[] newSpaces = new Space[size * 2];
         System.arraycopy(spaces,0,newSpaces ,0, size);
         this.spaces = newSpaces;
     }
 
-    public boolean add (RentedSpace space) {
+    public boolean add (Space space) {
         if (spaces.length == size) {
             spaces = increase(spaces);
             }
@@ -54,7 +55,7 @@ public class OwnersFloor implements Floor {
         return true;
     }
 
-    public boolean add (int index, RentedSpace space) {
+    public boolean add (int index, Space space) {
             if (spaces.length == size) {
                 spaces = increase(spaces);
             }
@@ -64,11 +65,11 @@ public class OwnersFloor implements Floor {
         return true;
     }
 
-    public RentedSpace get (int index) {
+    public Space get (int index) {
         return spaces[index];
     }
 
-    public RentedSpace get (String registrationNumber) {
+    public Space get (String registrationNumber) {
         int index = indexOf(registrationNumber);
         if (index != -1) return spaces[index];
         return null;
@@ -78,21 +79,21 @@ public class OwnersFloor implements Floor {
         return indexOf(registrationNumber) != -1;
     }
 
-    public RentedSpace set (int index, RentedSpace space) {
-        RentedSpace removedSpace = spaces[index];
+    public Space set (int index, Space space) {
+        Space removedSpace = spaces[index];
         spaces[index] = space;
         return removedSpace;
     }
 
-    public RentedSpace remove (int index) {
-        RentedSpace space = spaces[index];
+    public Space remove (int index) {
+        Space space = spaces[index];
         System.arraycopy(spaces, index + 1, spaces, index, size - index - 1);
         size--;
         spaces[size] = null;
         return space;
     }
 
-    public RentedSpace remove (String registrationNumber) {
+    public Space remove (String registrationNumber) {
         int index = indexOf(registrationNumber);
         return remove(index);
     }
@@ -101,8 +102,8 @@ public class OwnersFloor implements Floor {
         return size;
     }
 
-    public RentedSpace[] getSpaces () {
-        RentedSpace[] newSpace = new RentedSpace[size];
+    public Space[] getSpaces () {
+        Space[] newSpace = new Space[size];
         System.arraycopy(spaces, 0, newSpace, 0, size);
         return newSpace;
     }

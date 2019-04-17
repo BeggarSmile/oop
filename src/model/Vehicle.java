@@ -1,4 +1,5 @@
 package model;
+
 public class Vehicle {
     private String registrationNumber;
     private String maker;
@@ -18,23 +19,29 @@ public class Vehicle {
         return (registrationNumber);
     }
 
+    /*
     public void setRegistrationNumberNumber (String countryNumber) {
         this.registrationNumber = countryNumber;
     }
+    */
 
     public String getMaker () {
         return (maker);
     }
 
+    /*
     public void setMaker (String maker) {
         this.maker = maker;
     }
+    */
 
     public String getModel() {
         return (model);
     }
 
+    /*
     public void setModel(String model) {
         this.model = model;
     }
+    */
 }
