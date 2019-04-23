@@ -132,4 +132,28 @@ public class Parking {
         }
         return oldSpace;
     }
+
+    public int emptySpacesQuantity() {
+        int quantity = 0;
+
+        for (int i = 0; i < size; i++) {
+            quantity += floors[i].size();
+        }
+
+        for (int i = 0; i < size; i++) {
+            quantity -= floors[i].vehiclesQuantity();
+        }
+
+        return quantity;
+    }
+
+    public int vehiclesQuantity(VehicleTypes type) {
+        int quantity = 0;
+
+        for (int i = 0; i < size; i++) {
+            quantity += floors[i].vehiclesQuantity(type);
+        }
+
+        return quantity;
+    }
 }

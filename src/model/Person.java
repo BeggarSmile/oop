@@ -1,7 +1,7 @@
 package model;
-public class Person {
-    private String firstName;
-    private String lastName;
+public final class Person {
+    private final String firstName;
+    private final String lastName;
 
     public Person (String name, String lastName) {
         this.firstName = name;

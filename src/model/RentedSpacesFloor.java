@@ -4,15 +4,25 @@ public class RentedSpacesFloor implements Floor{
 
     private Node head = new Node(null);
     private int size;
-    private Node first;
-    private Node last;
 
     public int vehiclesQuantity() {
         Space[] spaces = getSpaces();
 
         int count = 0;
         for (int i = 0; i < size; i++) {
-            if (spaces[i].isEmpty()) {
+            if (!spaces[i].isEmpty()) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int vehiclesQuantity(VehicleTypes type) {
+        Space[] spaces = getSpaces();
+
+        int count = 0;
+        for (int i = 0; i < size; i++) {
+            if (!spaces[i].isEmpty() && spaces[i].getVehicle().getType() == type) {
                 count++;
             }
         }
@@ -31,43 +41,22 @@ public class RentedSpacesFloor implements Floor{
 
     public RentedSpacesFloor(Space[] spaces) {
         for (int i = 0; i < spaces.length; i++) {
-            Node node = new Node(spaces[i]);
-            if (i == 0) {
-                node.setNext(node);
-                node.setPrevious(node);
-                first = node;
-                last = node;
-                head.setNext(node);
-                head.setPrevious(node);
-                size++;
-            } else {
-                last.setNext(node);
-                first.setPrevious(node);
-                node.setNext(first);
-                node.setPrevious(last);
-                last = node;
-                head.setPrevious(last);
-                size++;
-            }
+            addLast(spaces[i]);
         }
     }
 
     private boolean addLast(Space space) {
         Node node = new Node(space);
         if (size == 0) {
-            first = node;
-            last = node;
-            head.setNext(first);
-            head.setPrevious(last);
+            head.setNext(node);
+            head.setPrevious(node);
             size++;
         }
         else {
-            last.setNext(node);
-            first.setPrevious(node);
-            node.setNext(first);
-            node.setPrevious(last);
-            last = node;
-            head.setPrevious(last);
+            node.setPrevious(head.getPrevious());
+            node.setNext(head.getNext());
+            head.getPrevious().setNext(node);
+            head.setPrevious(node);
             size++;
         }
         return true;
@@ -78,12 +67,10 @@ public class RentedSpacesFloor implements Floor{
         Node addedNode = new Node(space);
 
         if (index == 0) {
-            first.setPrevious(addedNode);
-            last.setNext(addedNode);
-            addedNode.setNext(first);
-            addedNode.setPrevious(last);
-            first = addedNode;
-            head.setNext(first);
+            node.setNext(head.getNext());
+            node.setPrevious(head.getPrevious());
+            head.getNext().setPrevious(node);
+            head.setNext(node);
         }
         else if (index == size) {
             addLast(space);
@@ -92,10 +79,10 @@ public class RentedSpacesFloor implements Floor{
             for (int i = 0; i < size; i++) {
                 node = node.getNext();
                 if (i == index) {
+                    addedNode.setNext(node);
+                    addedNode.setPrevious(node.getPrevious());
                     node.setPrevious(addedNode);
-                    addedNode.setNext(node.getNext());
-                    node.setNext(addedNode);
-                    addedNode.setPrevious(node);
+                    node.getPrevious().setNext(addedNode);
                 }
             }
         }
@@ -115,7 +102,7 @@ public class RentedSpacesFloor implements Floor{
             }
         }
 
-        return node;
+        return null;
     }
 
     private Space setNode(int index, Space space) {
@@ -125,19 +112,16 @@ public class RentedSpacesFloor implements Floor{
     private Space removeNode(int index) {
         Node node = head;
         Node removedNode = null;
+
         if (index == 0) {
-            removedNode = first;
-            head.setNext(node.getNext().getNext());
-            node.getNext().getNext().setPrevious(last);
-            last.setNext(node.getNext().getNext());
-            return removedNode.getValue();
+            removedNode = head.getNext();
+            head.getNext().setValue(null);
+            head = head.getNext();
         }
         else if (index == size - 1) {
-            removedNode = last;
-            head.setPrevious(node.getPrevious().getPrevious());
-            node.getPrevious().getPrevious().setNext(first);
-            first.setPrevious(node.getPrevious().getPrevious());
-            return removedNode.getValue();
+            removedNode = head.getPrevious();
+            head.getPrevious().setValue(null);
+            head = head.getPrevious();
         }
         else if (index < size) {
             for (int i = 0; i < size; i++) {
@@ -227,23 +211,48 @@ public class RentedSpacesFloor implements Floor{
 
     //todo need complete - done
     public Vehicle[] getVehicles() {
-        int count = 0;
         Space[] spaces = getSpaces();
-
-        for (int i = 0; i < size; i++) {
-            if (spaces[i].getVehicle() != null) count++;
-        }
-
-        int counter = 0;
-        Vehicle[] vehicles = new Vehicle[count];
+        Vehicle[] vehicles = new Vehicle[vehiclesQuantity()];
+        int count = 0;
 
         for (int i = 0; i < size; i++) {
             if (spaces[i].getVehicle() != null) {
-                vehicles[counter] = spaces[i].getVehicle();
-                counter++;
+                vehicles[count] = spaces[i].getVehicle();
+                count++;
             }
         }
 
-        return vehicles;
+        Vehicle[] newVehicles = new Vehicle[count];
+        System.arraycopy(vehicles, 0, newVehicles, 0 ,count);
+        return newVehicles;
     }
+
+    public Space[] getSpaces(VehicleTypes type) {
+        Space[] oldSpaces = getSpaces();
+        Space[] newSpaces = new Space[vehiclesQuantity(type)];
+        int count = 0;
+
+        for (int i = 0; i < size; i++) {
+            if (!oldSpaces[i].isEmpty() && oldSpaces[i].getVehicle().getType() == type) {
+                newSpaces[count] = oldSpaces[i];
+                count++;
+            }
+        }
+        return newSpaces;
+    }
+
+    public Space[] getEmptySpaces() {
+        Space[] oldSpaces = getSpaces();
+        Space[] emptySpaces = new Space[size - vehiclesQuantity()];
+        int count = 0;
+
+        for (int i = 0; i < size; i++) {
+            if (!oldSpaces[i].isEmpty()) {
+                emptySpaces[count] = oldSpaces[i];
+                count++;
+            }
+        }
+        return emptySpaces;
+    }
+
 }

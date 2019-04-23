@@ -1,32 +1,15 @@
 package model;
 
-public class OwnedSpace implements Space {
-    private Person person;
-    private Vehicle vehicle;
+public class OwnedSpace extends AbstractSpace {
+    public OwnedSpace() {
+        this(Person.UNKNOWN_PERSON, Vehicle.NO_VEHICLE);
+    }
+
+    public OwnedSpace(Person person) {
+        this(person, Vehicle.NO_VEHICLE);
+    }
 
     public OwnedSpace(Person person, Vehicle vehicle) {
-        this.person = person;
-        this.vehicle = vehicle;
+        super(person, vehicle);
     }
-
-    public Person getPerson() {
-        return person;
-    }
-
-    public Vehicle getVehicle() {
-        return vehicle;
-    }
-
-    public void setPerson(Person person) {
-        this.person = person;
-    }
-
-    public void setVehicle(Vehicle vehicle) {
-        this.vehicle = vehicle;
-    }
-
-    public boolean isEmpty() {
-        return (person == null || vehicle.getRegistrationNumber().equals(""));
-    }
-
 }

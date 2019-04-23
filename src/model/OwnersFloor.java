@@ -24,7 +24,17 @@ public class OwnersFloor implements Floor {
     public int vehiclesQuantity() {
         int count = 0;
         for (int i = 0; i < size; i++) {
-            if (spaces[i].isEmpty()) {
+            if (!spaces[i].isEmpty()) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int vehiclesQuantity(VehicleTypes type) {
+        int count = 0;
+        for (int i = 0; i < size; i++) {
+            if (!spaces[i].isEmpty() && spaces[i].getVehicle().getType() == type) {
                 count++;
             }
         }
@@ -109,16 +119,42 @@ public class OwnersFloor implements Floor {
     }
 
     public Vehicle[] getVehicles() {
+        Vehicle[] newVehicles = new Vehicle[vehiclesQuantity()];
         int count = 0;
-        Vehicle[] newVehicles = new Vehicle[spaces.length];
+
         for (int i = 0; i < size; i++) {
             if (spaces[i].isEmpty()) {
                 newVehicles[count] = spaces[i].getVehicle();
                 count++;
             }
         }
-        Vehicle[] vehicles = new Vehicle[count];
-        System.arraycopy(newVehicles, 0, vehicles, 0, count);
-        return vehicles;
+
+        return newVehicles;
+    }
+
+    public Space[] getSpaces(VehicleTypes type) {
+        Space[] newSpaces = new Space[vehiclesQuantity(type)];
+        int count = 0;
+
+        for (int i = 0; i < size; i++) {
+            if (!spaces[i].isEmpty() && spaces[i].getVehicle().getType() == type) {
+                newSpaces[count] = spaces[i];
+                count++;
+            }
+        }
+        return newSpaces;
+    }
+
+    public Space[] getEmptySpaces() {
+        Space[] emptySpaces = new Space[size - vehiclesQuantity()];
+        int count = 0;
+
+        for (int i = 0; i < size; i++) {
+            if (!spaces[i].isEmpty()) {
+                emptySpaces[count] = spaces[i];
+                count++;
+            }
+        }
+        return emptySpaces;
     }
 }

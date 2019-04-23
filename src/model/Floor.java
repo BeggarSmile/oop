@@ -25,5 +25,11 @@ public interface Floor {
 
     int vehiclesQuantity();
 
+    int vehiclesQuantity(VehicleTypes type);
+
     int indexOf(String registrationNumber);
+
+    Space[] getSpaces(VehicleTypes type);
+
+    Space[] getEmptySpaces();
 }

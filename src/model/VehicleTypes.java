@@ -4,7 +4,7 @@ public enum VehicleTypes {
     NONE,
     CAR,
     CROSSOVER,
-    MOTOR_BIK,
+    MOTOR_BIKE,
     SUV,
     TRUCK,
     OTHER
