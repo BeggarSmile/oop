@@ -5,86 +5,63 @@ public class RentedSpacesFloor implements Floor{
     private Node head = new Node(null);
     private int size;
 
-    public int vehiclesQuantity() {
-        Space[] spaces = getSpaces();
-
-        int count = 0;
-        for (int i = 0; i < size; i++) {
-            if (!spaces[i].isEmpty()) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    public int vehiclesQuantity(VehicleTypes type) {
-        Space[] spaces = getSpaces();
-
-        int count = 0;
-        for (int i = 0; i < size; i++) {
-            if (!spaces[i].isEmpty() && spaces[i].getVehicle().getType() == type) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    public int indexOf(String registrationNumber) {
-        Space[] spaces = getSpaces();
-
-        for (int i = 0; i < size; i++) {
-            if (spaces[i].getVehicle().getRegistrationNumber().equals(registrationNumber))
-                return i;
-        }
-        return -1;
-    }
-
     public RentedSpacesFloor(Space[] spaces) {
         for (int i = 0; i < spaces.length; i++) {
             addLast(spaces[i]);
         }
     }
-
+    //todo приватные методы работают с нодами, а не Space
     private boolean addLast(Space space) {
         Node node = new Node(space);
         if (size == 0) {
             head.setNext(node);
             head.setPrevious(node);
+            node.next = node;
+            node.previous = node;
             size++;
         }
         else {
             node.setPrevious(head.getPrevious());
             node.setNext(head.getNext());
+
             head.getPrevious().setNext(node);
+            head.next.previous = node;
+
             head.setPrevious(node);
             size++;
         }
         return true;
     }
 
+    //остальное пофиксили
     private boolean addIndex(int index, Space space) {
-        Node node = head;
+        Node node;
         Node addedNode = new Node(space);
-
+        //todo size == 0
         if (index == 0) {
-            node.setNext(head.getNext());
-            node.setPrevious(head.getPrevious());
-            head.getNext().setPrevious(node);
-            head.setNext(node);
+
+            addedNode.setNext(head.getNext());
+            addedNode.setPrevious(head.getPrevious());
+
+            head.getNext().setPrevious(addedNode);
+            head.previous.next = addedNode;
+
+            head.setNext(addedNode);
+            size++;
         }
         else if (index == size) {
             addLast(space);
         }
         else {
-            for (int i = 0; i < size; i++) {
-                node = node.getNext();
-                if (i == index) {
+                node = getNode(index);
+
                     addedNode.setNext(node);
                     addedNode.setPrevious(node.getPrevious());
+
                     node.setPrevious(addedNode);
                     node.getPrevious().setNext(addedNode);
-                }
-            }
+
+
         }
         return true;
     }
@@ -112,29 +89,66 @@ public class RentedSpacesFloor implements Floor{
     private Space removeNode(int index) {
         Node node = head;
         Node removedNode = null;
-
+        //todo removedNode.next = null; removedNode.previous = null;
+        //todo size==1
         if (index == 0) {
+            //todo не корректно. 0-й нод должен быть убран нафиг, а в head.next = head.next.next, head.previous.next = head.next.next
             removedNode = head.getNext();
             head.getNext().setValue(null);
             head = head.getNext();
         }
         else if (index == size - 1) {
+            //todo не корректно, аналогично предыдущему
             removedNode = head.getPrevious();
             head.getPrevious().setValue(null);
             head = head.getPrevious();
         }
         else if (index < size) {
+            //todo getNode(index)
             for (int i = 0; i < size; i++) {
                 node = node.getNext();
                 if (i == index) {
                     removedNode = node;
                     node.getNext().setPrevious(node.getPrevious());
                     node.getPrevious().setNext(node.getNext());
+
                     return removedNode.getValue();
                 }
             }
         }
+
         return removedNode.getValue();
+    }
+
+    public int vehiclesQuantity() {
+        //todo циклом по нодам и считаем
+        int count = 0;
+        for (int i = 0; i < size; i++) {
+            if (!spaces[i].isEmpty()) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int vehiclesQuantity(VehicleTypes type) {
+        //todo циклом по нодам и считаем
+        int count = 0;
+        for (int i = 0; i < size; i++) {
+            if (!spaces[i].isEmpty() && spaces[i].getVehicle().getType() == type) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int indexOf(String registrationNumber) {
+        //todo циклом по нодам и считаем
+        for (int i = 0; i < size; i++) {
+            if (spaces[i].getVehicle().getRegistrationNumber().equals(registrationNumber))
+                return i;
+        }
+        return -1;
     }
 
     public boolean add(Space space) {
@@ -145,12 +159,11 @@ public class RentedSpacesFloor implements Floor{
         return addIndex(index, space);
     }
 
-    //todo need complete - done
     public Space get(int index) {
         return getNode(index).getValue();
     }
 
-    //todo need complete - done
+    //TODO убираем дублирование поиска элемента по номеру
     public Space get(String registrationNumber) {
         if (hasSpace(registrationNumber)) {
             for (int i = 0; i < size; i++) {
@@ -160,8 +173,7 @@ public class RentedSpacesFloor implements Floor{
         }
         return null;
     }
-
-    //todo need complete - done
+    //TODO убираем дублирование поиска элемента по номера
     public boolean hasSpace(String registrationNumber) {
         for (int i = 0; i < size; i++) {
             if (getNode(i).getValue().getVehicle().getRegistrationNumber().equals(registrationNumber))
@@ -170,17 +182,15 @@ public class RentedSpacesFloor implements Floor{
         return false;
     }
 
-    //todo need complete - done
     public Space set(int index, Space space) {
         return setNode(index, space);
     }
 
-    //todo need complete - done
     public Space remove(int index) {
         return removeNode(index);
     }
 
-    //todo need complete - done
+    //TODO убираем дублирование поиска элемента по номеру
     public Space remove(String registrationNumber) {
         if (hasSpace(registrationNumber)) {
             for (int i = 0; i < size; i++) {
@@ -191,12 +201,10 @@ public class RentedSpacesFloor implements Floor{
         return null;
     }
 
-    //todo need complete - done
     public int size() {
         return size;
     }
 
-    //todo need complete - done
     public Space[] getSpaces() {
         Space[] spaces = new Space[size];
         Node node = head;
@@ -211,10 +219,9 @@ public class RentedSpacesFloor implements Floor{
 
     //todo need complete - done
     public Vehicle[] getVehicles() {
-        Space[] spaces = getSpaces();
         Vehicle[] vehicles = new Vehicle[vehiclesQuantity()];
         int count = 0;
-
+        //todo циклом по нодам
         for (int i = 0; i < size; i++) {
             if (spaces[i].getVehicle() != null) {
                 vehicles[count] = spaces[i].getVehicle();
@@ -228,10 +235,10 @@ public class RentedSpacesFloor implements Floor{
     }
 
     public Space[] getSpaces(VehicleTypes type) {
-        Space[] oldSpaces = getSpaces();
         Space[] newSpaces = new Space[vehiclesQuantity(type)];
         int count = 0;
 
+        //todo циклом по нодам
         for (int i = 0; i < size; i++) {
             if (!oldSpaces[i].isEmpty() && oldSpaces[i].getVehicle().getType() == type) {
                 newSpaces[count] = oldSpaces[i];
@@ -242,10 +249,9 @@ public class RentedSpacesFloor implements Floor{
     }
 
     public Space[] getEmptySpaces() {
-        Space[] oldSpaces = getSpaces();
         Space[] emptySpaces = new Space[size - vehiclesQuantity()];
         int count = 0;
-
+        //todo циклом по нодам
         for (int i = 0; i < size; i++) {
             if (!oldSpaces[i].isEmpty()) {
                 emptySpaces[count] = oldSpaces[i];

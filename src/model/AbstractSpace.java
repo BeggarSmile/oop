@@ -1,18 +1,18 @@
 package model;
 
 public abstract class AbstractSpace implements Space {
-    Person person;
-    Vehicle vehicle;
+    private Person person;
+    private Vehicle vehicle;
 
     protected AbstractSpace() {
         this(Person.UNKNOWN_PERSON, Vehicle.NO_VEHICLE);
     }
 
-    public AbstractSpace(Person person) {
+    protected AbstractSpace(Person person) {
         this(person, Vehicle.NO_VEHICLE);
     }
 
-    public AbstractSpace(Person person, Vehicle vehicle) {
+    protected AbstractSpace(Person person, Vehicle vehicle) {
         this.person = person;
         this.vehicle = vehicle;
     }
