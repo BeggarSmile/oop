@@ -1,6 +1,6 @@
 package model;
 
-public class RentedSpacesFloor implements Floor{
+public class RentedSpacesFloor implements Floor, Cloneable{
 
     private Node head = new Node(null);
     private int size;
@@ -89,6 +89,7 @@ public class RentedSpacesFloor implements Floor{
             removedNode = head.next;
             head.next = null;
             head.previous = null;
+            size--;
         }
         else if (index == 0) {
             //todo не корректно. 0-й нод должен быть убран нафиг, а в head.next = head.next.next, head.previous.next = head.next.next - done
@@ -96,6 +97,7 @@ public class RentedSpacesFloor implements Floor{
             head.next = head.next.next;
             head.previous.next = head.next.next;
             head.next.previous = head.previous;
+            size--;
         }
         else if (index == size - 1) {
             //todo не корректно, аналогично предыдущему - done
@@ -103,6 +105,7 @@ public class RentedSpacesFloor implements Floor{
             head.previous = head.previous.previous;
             head.next.previous = head.previous.previous;
             head.previous.next = head.next;
+            size--;
         }
         else if (index < size) {
             //todo getNode(index) - done
@@ -110,10 +113,46 @@ public class RentedSpacesFloor implements Floor{
             removedNode = node;
             node.next.previous = node.previous;
             node.previous.next = node.next;
+            size--;
         }
         removedNode.next = null;
         removedNode.previous = null;
         return removedNode.value;
+    }
+
+    //todo чет не работает, не забудь спросить
+    public String toString() {
+        StringBuilder strBuild = new StringBuilder("Rented spaces: ");
+        Node node = head;
+
+        for (int i = 0; i < size; i++) {
+            node = node.next;
+            strBuild.append(String.format("%n", node.value.getPerson().toString()));
+        }
+
+        return strBuild.toString();
+    }
+
+    public int hashCode() {
+        Node node = head.next;
+        int hash = head.next.value.hashCode();
+
+        for (int i = 1; i < size; i++) {
+            node = node.next;
+            hash ^= node.value.hashCode();
+        }
+
+        return (53 * size * hash);
+    }
+
+    public boolean equals(Object object) {
+        return (object instanceof RentedSpacesFloor && ((RentedSpacesFloor) object).getSpaces() == getSpaces());
+    }
+
+    public Object clone() throws CloneNotSupportedException{
+        RentedSpacesFloor clone = (RentedSpacesFloor)super.clone();
+
+        return clone;
     }
 
     public int vehiclesQuantity() {
@@ -174,6 +213,11 @@ public class RentedSpacesFloor implements Floor{
         }
         return null;
     }
+
+    public int getIndex(Space space) {
+        return indexOf(space.getVehicle().getRegistrationNumber());
+    }
+
     //TODO убираем дублирование поиска элемента по номера - done
     public boolean hasSpace(String registrationNumber) {
         return indexOf(registrationNumber) != -1;
@@ -194,6 +238,14 @@ public class RentedSpacesFloor implements Floor{
             return removeNode(indexOf(registrationNumber));
         }
         return null;
+    }
+
+    public boolean remove(Space space) {
+        if (hasSpace(space.getVehicle().getRegistrationNumber())){
+            remove(space.getVehicle().getRegistrationNumber());
+            return true;
+        }
+        return false;
     }
 
     public int size() {
@@ -244,6 +296,18 @@ public class RentedSpacesFloor implements Floor{
             }
         }
         return newSpaces;
+    }
+
+    public int getSpaces(Person person) {
+        int count = 0;
+        Node node = head;
+
+        for (int i = 0; i < size; i++) {
+            node = node.next;
+            if (node.value.getPerson() == person) count++;
+        }
+
+        return count;
     }
 
     public Space[] getEmptySpaces() {

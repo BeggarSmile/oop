@@ -1,6 +1,6 @@
 package model;
 
-public abstract class AbstractSpace implements Space {
+public abstract class AbstractSpace implements Space, Cloneable {
     private Person person;
     private Vehicle vehicle;
 
@@ -15,6 +15,26 @@ public abstract class AbstractSpace implements Space {
     protected AbstractSpace(Person person, Vehicle vehicle) {
         this.person = person;
         this.vehicle = vehicle;
+    }
+
+    public String toString() {
+        return String.format(person.toString() + " " + vehicle.toString());
+    }
+
+    public int hashCode() {
+        return (person.hashCode() * vehicle.hashCode());
+    }
+
+    public boolean equals(Object object) {
+        return (object instanceof AbstractSpace && ((AbstractSpace) object).person == person && ((AbstractSpace) object).vehicle == vehicle);
+    }
+
+    protected Object clone() throws CloneNotSupportedException{
+        AbstractSpace clone = (AbstractSpace)super.clone();
+        clone.vehicle = (Vehicle)vehicle.clone();
+        clone.person = (Person)person.clone();
+
+        return clone;
     }
 
     public Vehicle getVehicle() {

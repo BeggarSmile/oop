@@ -1,10 +1,57 @@
 package model;
 
 
-public class OwnersFloor implements Floor {
+public class OwnersFloor implements Floor, Cloneable {
     private int size;
     private Space[] spaces;
     private static final int CAPACITY_DEFAULT = 16;
+
+    public OwnersFloor () {
+        this(CAPACITY_DEFAULT);
+    }
+
+    public OwnersFloor (int numberSpace) {
+        this.spaces = new Space[numberSpace];
+    }
+
+    public OwnersFloor (Space[] spaces) {
+        size = spaces.length;
+        Space[] newSpaces = new Space[size * 2];
+        System.arraycopy(spaces,0,newSpaces ,0, size);
+        this.spaces = newSpaces;
+    }
+
+    //todo чет не работает, не забудь спросить
+    public String toString() {
+        StringBuilder strBuild = new StringBuilder("Spaces: ");
+
+        for (int i = 0; i < size; i++) {
+            strBuild.append(String.format("%n", spaces[i].getPerson().toString() + " TC: " + spaces[i].getVehicle().toString()));
+        }
+
+        return strBuild.toString();
+    }
+
+    public int hashCode() {
+        int hash = spaces[0].hashCode();
+
+        for (int i = 1; i < size; i++) {
+            hash ^= spaces[i].hashCode();
+        }
+
+        return (53 * size * hash);
+    }
+
+    public boolean equals(Object object) {
+        return (object instanceof OwnersFloor && ((OwnersFloor) object).getSpaces() == spaces);
+    }
+
+    public Object clone() throws CloneNotSupportedException{
+        OwnersFloor clone = (OwnersFloor)super.clone();
+        clone.spaces = (Space[])spaces.clone();
+
+        return clone;
+    }
 
     public Space[] increase (Space[] spaces) {
             Space[] newSpaces = new RentedSpace[size * 2];
@@ -41,21 +88,6 @@ public class OwnersFloor implements Floor {
         return count;
     }
 
-    public OwnersFloor () {
-        this(CAPACITY_DEFAULT);
-    }
-
-    public OwnersFloor (int numberSpace) {
-        this.spaces = new Space[numberSpace];
-    }
-
-    public OwnersFloor (Space[] spaces) {
-        size = spaces.length;
-        Space[] newSpaces = new Space[size * 2];
-        System.arraycopy(spaces,0,newSpaces ,0, size);
-        this.spaces = newSpaces;
-    }
-
     public boolean add (Space space) {
         if (spaces.length == size) {
             spaces = increase(spaces);
@@ -85,6 +117,10 @@ public class OwnersFloor implements Floor {
         return null;
     }
 
+    public int getIndex (Space space) {
+        return indexOf(space.getVehicle().getRegistrationNumber());
+    }
+
     public boolean hasSpace (String registrationNumber) {
         return indexOf(registrationNumber) != -1;
     }
@@ -106,6 +142,14 @@ public class OwnersFloor implements Floor {
     public Space remove (String registrationNumber) {
         int index = indexOf(registrationNumber);
         return remove(index);
+    }
+
+    public boolean remove (Space space) {
+        if (hasSpace(space.getVehicle().getRegistrationNumber())) {
+            remove(space.getVehicle().getRegistrationNumber());
+            return true;
+        }
+        return false;
     }
 
     public int size() {
@@ -143,6 +187,16 @@ public class OwnersFloor implements Floor {
             }
         }
         return newSpaces;
+    }
+
+    public int getSpaces(Person person) {
+        int count = 0;
+
+        for (int i = 0; i < size; i++) {
+            if (spaces[i].getPerson() == person) count++;
+        }
+
+        return count;
     }
 
     public Space[] getEmptySpaces() {

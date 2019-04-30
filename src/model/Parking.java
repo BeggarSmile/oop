@@ -4,13 +4,6 @@ public class Parking {
     private Floor[] floors;
     private int size;
 
-    public Floor[] increase (Floor[] floors) {
-        Floor[] newFloor = new Floor[size * 2];
-        System.arraycopy(floors,0,newFloor ,0, size);
-        floors = newFloor;
-        return floors;
-    }
-
     public Parking (int numberFloors) {
         floors = new Floor[numberFloors];
     }
@@ -20,6 +13,24 @@ public class Parking {
         Floor[] newFloors = floors;
         System.arraycopy(floors, 0 , newFloors, 0, size);
         this.floors = newFloors;
+    }
+
+    //todo чет не работает, не забудь спросить
+    public String toString() {
+        StringBuilder strBuild = new StringBuilder("Floors (" + size + " ): ");
+
+        for (int i = 0; i < size; i++) {
+            strBuild.append(String.format("%n", floors[i].toString()));
+        }
+
+        return strBuild.toString();
+    }
+
+    public Floor[] increase (Floor[] floors) {
+        Floor[] newFloor = new Floor[size * 2];
+        System.arraycopy(floors,0,newFloor ,0, size);
+        floors = newFloor;
+        return floors;
     }
 
     public boolean add (Floor floor) {
@@ -63,13 +74,33 @@ public class Parking {
         return size;
     }
 
-    public Floor[] getFloors () {
+    public Floor[] getFloors() {
         Floor[] newFloors = new Floor[size];
         System.arraycopy(floors, 0 , newFloors, 0 , size);
         return newFloors;
     }
 
-    public Floor[] sortedBySizeFloors () {
+    public Floor[] getFloors(Person person) {
+        int count = 0;
+
+        for (int i = 0; i < size; i++) {
+            if (floors[i].getSpaces(person) != 0) count++;
+        }
+
+        Floor[] newFloors = new Floor[count];
+        count = 0;
+
+        for (int i = 0; i < size; i++) {
+            if (floors[i].getSpaces(person) != 0){
+                System.arraycopy(floors, i, newFloors, count, 1);
+                count++;
+            }
+        }
+
+        return newFloors;
+    }
+
+    public Floor[] sortedBySizeFloors() {
 
         Floor[] newFloors = getFloors();
         for (int j = 0; j < size - 1; j++) {

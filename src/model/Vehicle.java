@@ -1,6 +1,6 @@
 package model;
 
-public final class Vehicle {
+public final class Vehicle implements Cloneable {
     private final String registrationNumber;
     private final String maker;
     private final String model;
@@ -18,35 +18,36 @@ public final class Vehicle {
         this.type = type;
     }
 
+    public String toString() {
+        if (type.equals(Vehicle.NO_VEHICLE)) return "NONE";
+        else return String.format(maker + " " + model + " (" + type + ") " + "regNumber: " + registrationNumber);
+    }
+
+    public int hashCode() {
+        return (maker.hashCode() * model.hashCode() * type.hashCode() * registrationNumber.hashCode());
+    }
+
+    public boolean equals(Object object) {
+        return (object instanceof Vehicle && ((Vehicle) object).maker == maker && ((Vehicle) object).model == model && ((Vehicle) object).type == type && ((Vehicle) object).registrationNumber == registrationNumber);
+    }
+
+    public Object clone() throws CloneNotSupportedException{
+        Vehicle clone = (Vehicle)super.clone();
+
+        return clone;
+    }
+
     public String getRegistrationNumber () {
         return (registrationNumber);
     }
-
-    /*
-    public void setRegistrationNumberNumber (String countryNumber) {
-        this.registrationNumber = countryNumber;
-    }
-    */
 
     public String getMaker () {
         return maker;
     }
 
-    /*
-    public void setMaker (String maker) {
-        this.maker = maker;
-    }
-    */
-
     public String getModel() {
         return model;
     }
-
-    /*
-    public void setModel(String model) {
-        this.model = model;
-    }
-    */
 
     public VehicleTypes getType() {
         return type;
