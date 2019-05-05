@@ -1,5 +1,9 @@
 package model;
 
+import java.time.LocalDate;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+
 public class RentedSpacesFloor implements Floor, Cloneable{
 
     private Node head = new Node(null);
@@ -155,6 +159,47 @@ public class RentedSpacesFloor implements Floor, Cloneable{
         return clone;
     }
 
+    public boolean searchRentedSpace() {
+        Node node = head;
+
+        for (int i = 0; i < size; i++) {
+            node = node.next;
+            if (node.value instanceof RentedSpace) return true;
+        }
+
+        return false;
+    }
+
+    public LocalDate nearestRentEndsDate() {
+        // Исключение notFound
+        if (!searchRentedSpace()) throw new NoRentedSpaceException();
+
+        Node node = head;
+        LocalDate minDate = node.next.value.getSinceDate();
+
+        for (int i = 0; i < size; i++) {
+            node = node.next;
+            if (node.value.getSinceDate().isBefore(minDate)) minDate = node.value.getSinceDate();
+        }
+
+        return minDate;
+    }
+
+    public Space spaceWithNearestRentEndsDate() {
+        // Исключение notFound
+        if (!searchRentedSpace()) throw new NoRentedSpaceException();
+
+        Node node = head;
+        LocalDate minDate = nearestRentEndsDate();
+
+        for (int i = 0; i < size; i++) {
+            node = node.next;
+            if (node.value.getSinceDate() == minDate) return node.value;
+        }
+
+        return null;
+    }
+
     public int vehiclesQuantity() {
         //todo циклом по нодам и считаем - done
         Node node = head;
@@ -170,6 +215,10 @@ public class RentedSpacesFloor implements Floor, Cloneable{
 
     public int vehiclesQuantity(VehicleTypes type) {
         //todo циклом по нодам и считаем - done
+
+        // Исключение isNull
+        Objects.requireNonNull(type, "type - null");
+
         Node node = head;
         int count = 0;
         for (int i = 0; i < size; i++) {
@@ -181,8 +230,16 @@ public class RentedSpacesFloor implements Floor, Cloneable{
         return count;
     }
 
-    public int indexOf(String registrationNumber) {
+    public int indexOf(String registrationNumber) throws IlleagalRegistrationNumberFormat {
         //todo циклом по нодам и считаем - done
+
+        // Исключение isNull
+        Objects.requireNonNull(registrationNumber, "registrationNumber - null");
+
+        // Исключение illegalRegNumber
+        PatternCheck patternCheck = new PatternCheck(registrationNumber);
+        if (!patternCheck.check()) throw new IlleagalRegistrationNumberFormat();
+
         Node node = head;
         for (int i = 0; i < size; i++) {
             node = node.next;
@@ -193,54 +250,106 @@ public class RentedSpacesFloor implements Floor, Cloneable{
     }
 
     public boolean add(Space space) {
+        // Исключение isNull
+        Objects.requireNonNull(space, "space - null");
+
         Node node = new Node(space);
         return addLast(node);
     }
 
     public boolean add(int index, Space space) {
+        // Исключение isNull
+        Objects.requireNonNull(space, "space - null");
+
+        // Исключение illegalIndex
+        if (index < 0 || index >= size) throw new IndexOutOfBoundsException();
+
         Node node = new Node(space);
         return addIndex(index, node);
     }
 
     public Space get(int index) {
+        // Исключение illegalIndex
+        if (index < 0 || index >= size) throw new IndexOutOfBoundsException();
+
         return getNode(index).value;
     }
 
     //TODO убираем дублирование поиска элемента по номеру - done
-    public Space get(String registrationNumber) {
+    public Space get(String registrationNumber) throws IlleagalRegistrationNumberFormat {
+        // Исключение isNull
+        Objects.requireNonNull(registrationNumber, "registrationNumber - null");
+
+        // Исключение illegalRegNumber
+        PatternCheck patternCheck = new PatternCheck(registrationNumber);
+        if (!patternCheck.check()) throw new IlleagalRegistrationNumberFormat();
+
         if (hasSpace(registrationNumber)) {
             return getNode(indexOf(registrationNumber)).value;
         }
-        return null;
+
+        // Исключение noSuchElement
+        else throw new NoSuchElementException();
     }
 
-    public int getIndex(Space space) {
+    public int getIndex(Space space) throws IlleagalRegistrationNumberFormat {
+        // Исключение isNull
+        Objects.requireNonNull(space, "space - null");
+
         return indexOf(space.getVehicle().getRegistrationNumber());
     }
 
     //TODO убираем дублирование поиска элемента по номера - done
-    public boolean hasSpace(String registrationNumber) {
+    public boolean hasSpace(String registrationNumber) throws IlleagalRegistrationNumberFormat {
+        // Исключение isNull
+        Objects.requireNonNull(registrationNumber, "registrationNumber - null");
+
+        // Исключение illegalRegNumber
+        PatternCheck patternCheck = new PatternCheck(registrationNumber);
+        if (!patternCheck.check()) throw new IlleagalRegistrationNumberFormat();
+
         return indexOf(registrationNumber) != -1;
     }
 
     public Space set(int index, Space space) {
+        // Исключение isNull
+        Objects.requireNonNull(space, "space - null");
+
+        // Исключение illegalIndex
+        if (index < 0 || index >= size) throw new IndexOutOfBoundsException();
+
         Node node = new Node(space);
         return setNode(index, node);
     }
 
     public Space remove(int index) {
+        // Исключение illegalIndex
+        if (index < 0 || index >= size) throw new IndexOutOfBoundsException();
+
         return removeNode(index);
     }
 
     //TODO убираем дублирование поиска элемента по номеру - done
-    public Space remove(String registrationNumber) {
+    public Space remove(String registrationNumber) throws IlleagalRegistrationNumberFormat {
+        // Исключение isNull
+        Objects.requireNonNull(registrationNumber, "registrationNumber - null");
+
+        // Исключение illegalRegNumber
+        PatternCheck patternCheck = new PatternCheck(registrationNumber);
+        if (!patternCheck.check()) throw new IlleagalRegistrationNumberFormat();
+
         if (hasSpace(registrationNumber)) {
             return removeNode(indexOf(registrationNumber));
         }
-        return null;
+
+        // Исключение noSuchElement
+        else throw new NoSuchElementException();
     }
 
-    public boolean remove(Space space) {
+    public boolean remove(Space space) throws IlleagalRegistrationNumberFormat {
+        // Исключение isNull
+        Objects.requireNonNull(space, "space - null");
+
         if (hasSpace(space.getVehicle().getRegistrationNumber())){
             remove(space.getVehicle().getRegistrationNumber());
             return true;
@@ -284,6 +393,9 @@ public class RentedSpacesFloor implements Floor, Cloneable{
     }
 
     public Space[] getSpaces(VehicleTypes type) {
+        // Исключение isNull
+        Objects.requireNonNull(type, "type - null");
+
         Space[] newSpaces = new Space[vehiclesQuantity(type)];
         int count = 0;
         Node node = head;
@@ -299,6 +411,9 @@ public class RentedSpacesFloor implements Floor, Cloneable{
     }
 
     public int getSpaces(Person person) {
+        // Исключение isNull
+        Objects.requireNonNull(person, "person - null");
+
         int count = 0;
         Node node = head;
 

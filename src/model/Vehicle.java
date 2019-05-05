@@ -1,17 +1,30 @@
 package model;
 
+import java.util.Objects;
+
 public final class Vehicle implements Cloneable {
     private final String registrationNumber;
     private final String maker;
     private final String model;
     private final VehicleTypes type;
-    public static final Vehicle NO_VEHICLE = new Vehicle();
+    public static final Vehicle NO_VEHICLE = new Vehicle(VehicleTypes.NONE);
 
-    public Vehicle () {
-        this("", "", "", VehicleTypes.NONE);
+    public Vehicle(VehicleTypes type) throws IlleagalRegistrationNumberFormat {
+        this("", "", "", type);
     }
 
-    public Vehicle (String registrationNumber, String maker, String model, VehicleTypes type) {
+    public Vehicle(String registrationNumber, String maker, String model, VehicleTypes type) throws IlleagalRegistrationNumberFormat {
+        // Исключения isNull
+        Objects.requireNonNull(registrationNumber, "registrationNumber - null");
+        Objects.requireNonNull(maker, "maker - null");
+        Objects.requireNonNull(model, "model - null");
+        Objects.requireNonNull(type, "type - null");
+
+        // Исключение illegalRegNumber
+        PatternCheck patternCheck = new PatternCheck(registrationNumber);
+        if (!patternCheck.check()) throw new IlleagalRegistrationNumberFormat();
+
+        // Конструктор
         this.registrationNumber = registrationNumber;
         this.maker = maker;
         this.model = model;

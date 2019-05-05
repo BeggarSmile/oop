@@ -1,10 +1,17 @@
 package model;
 
+import java.util.Objects;
+
 public final class Person implements Cloneable{
     private final String firstName;
     private final String lastName;
 
-    public Person (String name, String lastName) {
+    public Person (String name, String lastName) throws NullPointerException {
+        // Исключения isNull
+        Objects.requireNonNull(name, "name - null");
+        Objects.requireNonNull(lastName, "lastName - null");
+
+        // Конструктор
         this.firstName = name;
         this.lastName = lastName;
     }

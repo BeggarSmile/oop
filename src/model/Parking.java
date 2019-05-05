@@ -1,5 +1,9 @@
 package model;
 
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.regex.Pattern;
+
 public class Parking {
     private Floor[] floors;
     private int size;
@@ -34,6 +38,8 @@ public class Parking {
     }
 
     public boolean add (Floor floor) {
+        // Исключение isNull
+        Objects.requireNonNull(floor, "floor - null");
         if (floors.length == size) {
             floors = increase(floors);
         }
@@ -43,26 +49,44 @@ public class Parking {
     }
 
     public boolean add (int index, Floor floor) {
-            if (floors.length == size) {
-                floors = increase(floors);
-            }
-            System.arraycopy(floors, index, floors, index + 1, size - index - 1);
-            floors[index] = floor;
-            size++;
-            return true;
+        // Исключение isNull
+        Objects.requireNonNull(floor, "floor - null");
+
+        // Исключение illegalIndex
+        if (index < 0 || index >= size) throw new IndexOutOfBoundsException();
+
+        if (floors.length == size) {
+            floors = increase(floors);
+        }
+        System.arraycopy(floors, index, floors, index + 1, size - index - 1);
+        floors[index] = floor;
+        size++;
+        return true;
     }
 
     public Floor get (int index) {
+        // Исключение illegalIndex
+        if (index < 0 || index >= size) throw new IndexOutOfBoundsException();
+
         return floors[index];
     }
 
     public Floor set (int index, Floor floor) {
+        // Исключение isNull
+        Objects.requireNonNull(floor, "floor - null");
+
+        // Исключение illegalIndex
+        if (index < 0 || index >= size) throw new IndexOutOfBoundsException();
+
         Floor oldFloor = floors[index];
         floors[index] = floor;
         return oldFloor;
     }
 
     public Floor remove (int index) {
+        // Исключение illegalIndex
+        if (index < 0 || index >= size) throw new IndexOutOfBoundsException();
+
         Floor floor = floors[index];
         System.arraycopy(floors, index + 1, floors, index, size - index - 1 );
         floors[size - 1] = null;
@@ -81,6 +105,9 @@ public class Parking {
     }
 
     public Floor[] getFloors(Person person) {
+        // Исключение isNull
+        Objects.requireNonNull(person, "person - null");
+
         int count = 0;
 
         for (int i = 0; i < size; i++) {
@@ -134,34 +161,52 @@ public class Parking {
         return allVehicles;
     }
 
-    public Space getSpace (String registationNumber) {
+    public Space getSpace (String registrationNumber) throws IlleagalRegistrationNumberFormat {
+        // Исключение isNull
+        Objects.requireNonNull(registrationNumber, "registrationNumber - null");
+
+        // Исключение illegalRegNumber
+        PatternCheck patternCheck = new PatternCheck(registrationNumber);
+        if (!patternCheck.check()) throw new IlleagalRegistrationNumberFormat();
+
         for (int i = 0; i < size; i++) {
-            if (floors[i].hasSpace(registationNumber))
-                return floors[i].get(registationNumber);
+            if (floors[i].hasSpace(registrationNumber))
+                return floors[i].get(registrationNumber);
         }
-        return null;
+
+        // Исключение noSuchElement
+        throw new NoSuchElementException();
     }
 
-    public Space removeSpace (String registrationNumber) {
+    public Space removeSpace (String registrationNumber) throws IlleagalRegistrationNumberFormat {
+        // Исключение isNull
+        Objects.requireNonNull(registrationNumber, "registrationNumber - null");
+
         Space removedSpace = null;
         for (int i = 0; i < size; i++) {
             if (floors[i].hasSpace(registrationNumber)) {
-                removedSpace = floors[i].remove(registrationNumber);
-                break;
+                return floors[i].remove(registrationNumber);
             }
         }
-        return removedSpace;
+
+        // Исключение noSuchElement
+        throw new NoSuchElementException();
     }
 
-    public Space setSpace (Space space, String registrationNumber) {
+    public Space setSpace (Space space, String registrationNumber) throws IlleagalRegistrationNumberFormat {
+        // Исключение isNull
+        Objects.requireNonNull(registrationNumber, "registrationNumber - null");
+        Objects.requireNonNull(space, "space - null");
+
         Space oldSpace = null;
         for (int i = 0; i < size; i++) {
             if (floors[i].indexOf(registrationNumber) != -1) {
-                oldSpace = floors[i].set(i, space);
-                return oldSpace;
+                return floors[i].set(i, space);
             }
         }
-        return oldSpace;
+
+        // Исключение noSuchElement
+        throw new NoSuchElementException();
     }
 
     public int emptySpacesQuantity() {
@@ -179,6 +224,9 @@ public class Parking {
     }
 
     public int vehiclesQuantity(VehicleTypes type) {
+        // Исключение isNull
+        Objects.requireNonNull(type, "type - null");
+
         int quantity = 0;
 
         for (int i = 0; i < size; i++) {

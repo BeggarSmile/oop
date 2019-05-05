@@ -1,5 +1,7 @@
 package model;
 
+import java.time.LocalDate;
+
 public interface Floor {
     String toString();
 
@@ -9,25 +11,29 @@ public interface Floor {
 
     Object clone() throws CloneNotSupportedException;
 
+    LocalDate nearestRentEndsDate();
+
+    Space spaceWithNearestRentEndsDate();
+
     boolean add(Space space);
 
     boolean add(int index, Space space);
 
     Space get(int index);
 
-    Space get(String registrationNumber);
+    Space get(String registrationNumber) throws IlleagalRegistrationNumberFormat;
 
-    int getIndex(Space space);
+    int getIndex(Space space) throws IlleagalRegistrationNumberFormat;
 
-    boolean hasSpace(String registrationNumber);
+    boolean hasSpace(String registrationNumber) throws IlleagalRegistrationNumberFormat;
 
     Space set(int index, Space space);
 
     Space remove(int index);
 
-    Space remove(String registrationNumber);
+    Space remove(String registrationNumber) throws IlleagalRegistrationNumberFormat;
 
-    boolean remove(Space space);
+    boolean remove(Space space) throws IlleagalRegistrationNumberFormat;
 
     int size();
 
@@ -41,7 +47,7 @@ public interface Floor {
 
     int vehiclesQuantity(VehicleTypes type);
 
-    int indexOf(String registrationNumber);
+    int indexOf(String registrationNumber) throws IlleagalRegistrationNumberFormat;
 
     Space[] getSpaces(VehicleTypes type);
 

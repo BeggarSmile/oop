@@ -1,16 +1,25 @@
 package model;
+
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.Objects;
+
 public class RentedSpace extends AbstractSpace implements Cloneable {
 
+    private LocalDate rentEndsDate;
+
     public RentedSpace() {
-        this(Person.UNKNOWN_PERSON, Vehicle.NO_VEHICLE);
+        this(Person.UNKNOWN_PERSON, Vehicle.NO_VEHICLE, LocalDate.now(), LocalDate.now().plusDays(1));
+}
+
+    public RentedSpace(Person person, LocalDate sinceDate, LocalDate rentEndsDate) {
+        this(person, Vehicle.NO_VEHICLE, sinceDate, rentEndsDate);
     }
 
-    public RentedSpace(Person person) {
-        super(person, Vehicle.NO_VEHICLE);
-    }
-
-    public RentedSpace(Person person, Vehicle vehicle) {
-        super(person, vehicle);
+    public RentedSpace(Person person, Vehicle vehicle, LocalDate sinceDate, LocalDate rentEndsDate) {
+        super(person, vehicle, sinceDate);
+        Objects.requireNonNull(rentEndsDate, "rentEndsDate - null");
+        this.rentEndsDate = rentEndsDate;
     }
 
     public String toString() {
@@ -26,4 +35,19 @@ public class RentedSpace extends AbstractSpace implements Cloneable {
 
         return clone;
     }
+
+    public LocalDate getRentEndsDate() {
+        return rentEndsDate;
+    }
+
+    public void setRentEndsDate(LocalDate rentEndsDate) {
+        Objects.requireNonNull(rentEndsDate, "rentEndsDate - null");
+        this.rentEndsDate = rentEndsDate;
+    }
+
+    public Period getPeriod() {
+        return Period.between(LocalDate.now(), rentEndsDate);
+    }
+
+
 }
