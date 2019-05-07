@@ -23,9 +23,4 @@ public class OwnedSpace extends AbstractSpace implements Cloneable {
         return (71 * super.hashCode());
     }
 
-    public Object clone() throws CloneNotSupportedException{
-        OwnedSpace clone = (OwnedSpace)super.clone();
-
-        return clone;
-    }
 }

@@ -22,8 +22,10 @@ public class RentedSpace extends AbstractSpace implements Cloneable {
         this.rentEndsDate = rentEndsDate;
     }
 
+    //todo а где equals?
+
     public String toString() {
-        return String.format("Tenant: " + getPerson().toString() + " TC: " + getVehicle().toString());
+        return String.format("Tenant: " + getPerson().toString() + " TC: " + getVehicle().toString()); //todo это херня, а не формат
     }
 
     public int hashCode() {
@@ -32,7 +34,6 @@ public class RentedSpace extends AbstractSpace implements Cloneable {
 
     public Object clone() throws CloneNotSupportedException{
         RentedSpace clone = (RentedSpace)super.clone();
-
         return clone;
     }
 

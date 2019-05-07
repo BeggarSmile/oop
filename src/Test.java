@@ -4,6 +4,7 @@ import java.util.Objects;
 
 public class Test {
     public static void main (String[] args) {
+        //todo а где все тесты ?
         PatternCheck patternCheck = new PatternCheck("A111AAA1");
         System.out.println(patternCheck.check());
     }

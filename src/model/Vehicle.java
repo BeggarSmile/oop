@@ -8,6 +8,9 @@ public final class Vehicle implements Cloneable {
     private final String model;
     private final VehicleTypes type;
     public static final Vehicle NO_VEHICLE = new Vehicle(VehicleTypes.NONE);
+    /*todo 2 варианта есть: 1) селать приватный конструктор по умолчанию, без проверки формата и использовать его
+    2) сделать приватный метод инициализации пустыми строками без проверки формата и вызывать его
+    */
 
     public Vehicle(VehicleTypes type) throws IlleagalRegistrationNumberFormat {
         this("", "", "", type);
@@ -33,7 +36,7 @@ public final class Vehicle implements Cloneable {
 
     public String toString() {
         if (type.equals(Vehicle.NO_VEHICLE)) return "NONE";
-        else return String.format(maker + " " + model + " (" + type + ") " + "regNumber: " + registrationNumber);
+        else return String.format(maker + " " + model + " (" + type + ") " + "regNumber: " + registrationNumber); //todo это херня, а не формат
     }
 
     public int hashCode() {
@@ -41,6 +44,7 @@ public final class Vehicle implements Cloneable {
     }
 
     public boolean equals(Object object) {
+        //todo красавчик, строки сравнивать на ==.
         return (object instanceof Vehicle && ((Vehicle) object).maker == maker && ((Vehicle) object).model == model && ((Vehicle) object).type == type && ((Vehicle) object).registrationNumber == registrationNumber);
     }
 

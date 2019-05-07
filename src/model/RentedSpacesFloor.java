@@ -14,7 +14,6 @@ public class RentedSpacesFloor implements Floor, Cloneable{
             addLast(new Node(spaces[i]));
         }
     }
-    //todo приватные методы работают с нодами, а не Space - done
     private boolean addLast(Node node) {
         if (size == 0) {
             head.next = node;
@@ -34,10 +33,8 @@ public class RentedSpacesFloor implements Floor, Cloneable{
         return true;
     }
 
-    //остальное пофиксили
     private boolean addIndex(int index, Node addedNode) {
         Node node;
-        //todo size == 0 - done
         if (size == 0) {
             addLast(addedNode);
         }
@@ -64,6 +61,7 @@ public class RentedSpacesFloor implements Floor, Cloneable{
     }
 
     private Node getNode(int index) {
+        //todo логично проверку индекса с выбросом исключения делать здесь, и null в принципе не возвращать
         Node node = head;
 
         if (index > size || size == 0) {
@@ -87,8 +85,6 @@ public class RentedSpacesFloor implements Floor, Cloneable{
     private Space removeNode(int index) {
         Node node = head;
         Node removedNode = null;
-        //todo removedNode.next = null; removedNode.previous = null; - done
-        //todo size == 1 - done
         if (size == 1 && index == 0) {
             removedNode = head.next;
             head.next = null;
@@ -96,7 +92,6 @@ public class RentedSpacesFloor implements Floor, Cloneable{
             size--;
         }
         else if (index == 0) {
-            //todo не корректно. 0-й нод должен быть убран нафиг, а в head.next = head.next.next, head.previous.next = head.next.next - done
             removedNode = head.next;
             head.next = head.next.next;
             head.previous.next = head.next.next;
@@ -104,7 +99,6 @@ public class RentedSpacesFloor implements Floor, Cloneable{
             size--;
         }
         else if (index == size - 1) {
-            //todo не корректно, аналогично предыдущему - done
             removedNode = head.previous;
             head.previous = head.previous.previous;
             head.next.previous = head.previous.previous;
@@ -112,7 +106,6 @@ public class RentedSpacesFloor implements Floor, Cloneable{
             size--;
         }
         else if (index < size) {
-            //todo getNode(index) - done
             node = getNode(index);
             removedNode = node;
             node.next.previous = node.previous;
@@ -124,7 +117,7 @@ public class RentedSpacesFloor implements Floor, Cloneable{
         return removedNode.value;
     }
 
-    //todo чет не работает, не забудь спросить
+    //todo аналогично OwnersFloor
     public String toString() {
         StringBuilder strBuild = new StringBuilder("Rented spaces: ");
         Node node = head;
@@ -149,13 +142,14 @@ public class RentedSpacesFloor implements Floor, Cloneable{
         return (53 * size * hash);
     }
 
+    //todo аналогично OwnersFloor
     public boolean equals(Object object) {
         return (object instanceof RentedSpacesFloor && ((RentedSpacesFloor) object).getSpaces() == getSpaces());
     }
 
     public Object clone() throws CloneNotSupportedException{
         RentedSpacesFloor clone = (RentedSpacesFloor)super.clone();
-
+        //todo клонируем нодовую структуру целиком
         return clone;
     }
 
@@ -170,6 +164,7 @@ public class RentedSpacesFloor implements Floor, Cloneable{
         return false;
     }
 
+    //todo аналогично OwnersFloor
     public LocalDate nearestRentEndsDate() {
         // Исключение notFound
         if (!searchRentedSpace()) throw new NoRentedSpaceException();
@@ -184,7 +179,7 @@ public class RentedSpacesFloor implements Floor, Cloneable{
 
         return minDate;
     }
-
+    //todo аналогично OwnersFloor
     public Space spaceWithNearestRentEndsDate() {
         // Исключение notFound
         if (!searchRentedSpace()) throw new NoRentedSpaceException();
@@ -262,7 +257,7 @@ public class RentedSpacesFloor implements Floor, Cloneable{
         Objects.requireNonNull(space, "space - null");
 
         // Исключение illegalIndex
-        if (index < 0 || index >= size) throw new IndexOutOfBoundsException();
+        if (index < 0 || index >= size) throw new IndexOutOfBoundsException();     //todo аналогично OwnersFloor
 
         Node node = new Node(space);
         return addIndex(index, node);
@@ -270,13 +265,14 @@ public class RentedSpacesFloor implements Floor, Cloneable{
 
     public Space get(int index) {
         // Исключение illegalIndex
-        if (index < 0 || index >= size) throw new IndexOutOfBoundsException();
+        if (index < 0 || index >= size) throw new IndexOutOfBoundsException();     //todo аналогично OwnersFloor
+
 
         return getNode(index).value;
     }
 
-    //TODO убираем дублирование поиска элемента по номеру - done
     public Space get(String registrationNumber) throws IlleagalRegistrationNumberFormat {
+        //todo аналогично OwnersFloor
         // Исключение isNull
         Objects.requireNonNull(registrationNumber, "registrationNumber - null");
 
@@ -295,12 +291,12 @@ public class RentedSpacesFloor implements Floor, Cloneable{
     public int getIndex(Space space) throws IlleagalRegistrationNumberFormat {
         // Исключение isNull
         Objects.requireNonNull(space, "space - null");
-
+        //todo аналогично OwnersFloor
         return indexOf(space.getVehicle().getRegistrationNumber());
     }
 
-    //TODO убираем дублирование поиска элемента по номера - done
     public boolean hasSpace(String registrationNumber) throws IlleagalRegistrationNumberFormat {
+        //todo аналогично OwnersFloor
         // Исключение isNull
         Objects.requireNonNull(registrationNumber, "registrationNumber - null");
 
@@ -316,7 +312,7 @@ public class RentedSpacesFloor implements Floor, Cloneable{
         Objects.requireNonNull(space, "space - null");
 
         // Исключение illegalIndex
-        if (index < 0 || index >= size) throw new IndexOutOfBoundsException();
+        if (index < 0 || index >= size) throw new IndexOutOfBoundsException(); //todo будет лишее как getNode сделаешь
 
         Node node = new Node(space);
         return setNode(index, node);
@@ -324,13 +320,16 @@ public class RentedSpacesFloor implements Floor, Cloneable{
 
     public Space remove(int index) {
         // Исключение illegalIndex
-        if (index < 0 || index >= size) throw new IndexOutOfBoundsException();
+        if (index < 0 || index >= size) throw new IndexOutOfBoundsException(); //todo будет лишее как getNode сделаешь
 
         return removeNode(index);
     }
 
     //TODO убираем дублирование поиска элемента по номеру - done
     public Space remove(String registrationNumber) throws IlleagalRegistrationNumberFormat {
+        //todo аналогично OwnersFloor
+
+
         // Исключение isNull
         Objects.requireNonNull(registrationNumber, "registrationNumber - null");
 
@@ -347,6 +346,7 @@ public class RentedSpacesFloor implements Floor, Cloneable{
     }
 
     public boolean remove(Space space) throws IlleagalRegistrationNumberFormat {
+        //todo аналогично OwnersFloor
         // Исключение isNull
         Objects.requireNonNull(space, "space - null");
 
@@ -373,12 +373,10 @@ public class RentedSpacesFloor implements Floor, Cloneable{
         return spaces;
     }
 
-    //todo need complete - done
     public Vehicle[] getVehicles() {
         Vehicle[] vehicles = new Vehicle[vehiclesQuantity()];
         int count = 0;
         Node node = head;
-        //todo циклом по нодам - done
         for (int i = 0; i < size; i++) {
             node = node.next;
             if (node.value.getVehicle() != null) {
@@ -386,10 +384,7 @@ public class RentedSpacesFloor implements Floor, Cloneable{
                 count++;
             }
         }
-
-        Vehicle[] newVehicles = new Vehicle[count];
-        System.arraycopy(vehicles, 0, newVehicles, 0 ,count);
-        return newVehicles;
+        return vehicles;
     }
 
     public Space[] getSpaces(VehicleTypes type) {
@@ -399,7 +394,6 @@ public class RentedSpacesFloor implements Floor, Cloneable{
         Space[] newSpaces = new Space[vehiclesQuantity(type)];
         int count = 0;
         Node node = head;
-        //todo циклом по нодам - done
         for (int i = 0; i < size; i++) {
             node = node.next;
             if (!node.value.isEmpty() && node.value.getVehicle().getType() == type) {
@@ -429,7 +423,6 @@ public class RentedSpacesFloor implements Floor, Cloneable{
         Space[] emptySpaces = new Space[size - vehiclesQuantity()];
         int count = 0;
         Node node = head;
-        //todo циклом по нодам - done
         for (int i = 0; i < size; i++) {
             if (!node.value.isEmpty()) {
                 emptySpaces[count] = node.value;

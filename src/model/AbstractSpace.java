@@ -19,6 +19,7 @@ public abstract class AbstractSpace implements Space, Cloneable {
 
     protected AbstractSpace(Person person, Vehicle vehicle, LocalDate sinceDate) {
         // Исключения isNull
+        //todo а можно и методы set вызвать, чтоб не дублировать проверку и инициализацию полей...
         Objects.requireNonNull(person, "person - null");
         Objects.requireNonNull(vehicle, "vehicle - null");
         Objects.requireNonNull(sinceDate, "sinceDate - null");
@@ -33,16 +34,20 @@ public abstract class AbstractSpace implements Space, Cloneable {
         this.sinceDate = sinceDate;
     }
 
+    //todo это херня, а не формат.
     public String toString() {
         return String.format(person.toString() + " " + vehicle.toString() + " " + sinceDate);
-    }
+    } //todo формат не формат =))
 
     public int hashCode() {
         return (person.hashCode() * vehicle.hashCode() * sinceDate.hashCode());
     }
 
     public boolean equals(Object object) {
-        return (object instanceof AbstractSpace && ((AbstractSpace) object).person.equals(person) && ((AbstractSpace) object).vehicle.equals(vehicle) && ((AbstractSpace) object).sinceDate.equals(sinceDate));
+        return (object instanceof AbstractSpace &&
+                ((AbstractSpace) object).person.equals(person) &&
+                ((AbstractSpace) object).vehicle.equals(vehicle) &&
+                ((AbstractSpace) object).sinceDate.equals(sinceDate));
     }
 
     protected Object clone() throws CloneNotSupportedException{

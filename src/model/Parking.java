@@ -14,17 +14,17 @@ public class Parking {
 
     public Parking (Floor[] floors) {
         size = floors.length;
-        Floor[] newFloors = floors;
-        System.arraycopy(floors, 0 , newFloors, 0, size);
-        this.floors = newFloors;
+        this.floors = new Floor[size];
+        System.arraycopy(floors, 0 , this.floors, 0, size);
     }
 
-    //todo чет не работает, не забудь спросить
+    //todo
     public String toString() {
+        //todo НИКАКОЙ КОНКАТЕНАЦИИ В БИЛДЕРЕ - ПАЧКА АПЕНДОВ
         StringBuilder strBuild = new StringBuilder("Floors (" + size + " ): ");
 
         for (int i = 0; i < size; i++) {
-            strBuild.append(String.format("%n", floors[i].toString()));
+            strBuild.append('\n').append(floors[i].toString());
         }
 
         return strBuild.toString();
@@ -53,7 +53,7 @@ public class Parking {
         Objects.requireNonNull(floor, "floor - null");
 
         // Исключение illegalIndex
-        if (index < 0 || index >= size) throw new IndexOutOfBoundsException();
+        if (index < 0 || index >= size) throw new IndexOutOfBoundsException(); //todo
 
         if (floors.length == size) {
             floors = increase(floors);
@@ -66,7 +66,7 @@ public class Parking {
 
     public Floor get (int index) {
         // Исключение illegalIndex
-        if (index < 0 || index >= size) throw new IndexOutOfBoundsException();
+        if (index < 0 || index >= size) throw new IndexOutOfBoundsException(); //todo
 
         return floors[index];
     }
@@ -76,7 +76,7 @@ public class Parking {
         Objects.requireNonNull(floor, "floor - null");
 
         // Исключение illegalIndex
-        if (index < 0 || index >= size) throw new IndexOutOfBoundsException();
+        if (index < 0 || index >= size) throw new IndexOutOfBoundsException(); //todo
 
         Floor oldFloor = floors[index];
         floors[index] = floor;
@@ -85,7 +85,7 @@ public class Parking {
 
     public Floor remove (int index) {
         // Исключение illegalIndex
-        if (index < 0 || index >= size) throw new IndexOutOfBoundsException();
+        if (index < 0 || index >= size) throw new IndexOutOfBoundsException(); //todo
 
         Floor floor = floors[index];
         System.arraycopy(floors, index + 1, floors, index, size - index - 1 );
@@ -160,6 +160,7 @@ public class Parking {
 
         return allVehicles;
     }
+
 
     public Space getSpace (String registrationNumber) throws IlleagalRegistrationNumberFormat {
         // Исключение isNull
