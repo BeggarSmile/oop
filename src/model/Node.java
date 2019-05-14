@@ -1,6 +1,6 @@
 package model;
 
-class Node {
+class Node implements Cloneable{
     Space value;
     Node next;
     Node previous;
@@ -19,5 +19,11 @@ class Node {
         Space oldSpace = value;
         this.value = value;
         return oldSpace;
+    }
+
+    public Node clone() throws CloneNotSupportedException{
+        Node clone = (Node)super.clone();
+
+        return clone;
     }
 }

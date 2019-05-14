@@ -18,14 +18,22 @@ public class RentedSpace extends AbstractSpace implements Cloneable {
 
     public RentedSpace(Person person, Vehicle vehicle, LocalDate sinceDate, LocalDate rentEndsDate) {
         super(person, vehicle, sinceDate);
-        Objects.requireNonNull(rentEndsDate, "rentEndsDate - null");
-        this.rentEndsDate = rentEndsDate;
+        setRentEndsDate(rentEndsDate);
     }
 
-    //todo а где equals?
+    //todo а где equals? - done
+
+    public boolean equals(Object object) {
+        return (object instanceof RentedSpace &&
+                ((RentedSpace) object).getPerson().equals(super.getPerson()) &&
+                ((RentedSpace) object).getVehicle().equals(super.getVehicle()) &&
+                ((RentedSpace) object).getSinceDate().equals(super.getSinceDate()) &&
+                ((RentedSpace) object).getPeriod().equals(super.getPeriod()) &&
+                ((RentedSpace) object).getRentEndsDate().equals(rentEndsDate));
+    }
 
     public String toString() {
-        return String.format("Tenant: " + getPerson().toString() + " TC: " + getVehicle().toString()); //todo это херня, а не формат
+        return String.format("%s %s", super.toString(), rentEndsDate); //todo это херня, а не формат - done
     }
 
     public int hashCode() {

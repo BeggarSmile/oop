@@ -9,16 +9,10 @@ public class PatternCheck {
      поля matcher и check нафиг не нужны. Оставляешь один статичный атрибут pattern
     */
     //todo 2) паттерн не коррекен : а) не все буквы участвуют в номере б) используй квантификаторы и эскейпы, заменяющие цифры
-    private Pattern pattern = Pattern.compile("[ABC][0-9][0-9][0-9][A-Z][A-Z][0-9][0-9]");
-    private Matcher matcher;
-    private boolean check;
+    private static Pattern pattern = Pattern.compile("[ABEKMHOPCTYX][\\d]{3}[ABEKMHOPCTYX]{2}[\\d]{2,3}");
 
-    public PatternCheck(String registrationNumber) {
-        this.matcher = pattern.matcher(registrationNumber);
-        check = this.matcher.find();
-    }
-
-    public boolean check() {
-        return check;
+    public static boolean check(String registrationNumber) {
+        Matcher matcher = pattern.matcher(registrationNumber);
+        return matcher.find();
     }
 }

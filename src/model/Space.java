@@ -21,4 +21,6 @@ public interface Space {
 
     boolean isEmpty();
 
+    String toString();
+
 }

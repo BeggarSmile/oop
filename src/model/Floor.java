@@ -2,7 +2,7 @@ package model;
 
 import java.time.LocalDate;
 
-public interface Floor {
+public interface Floor{
     String toString();
 
     int hashCode();

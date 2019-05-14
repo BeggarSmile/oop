@@ -7,10 +7,15 @@ public final class Vehicle implements Cloneable {
     private final String maker;
     private final String model;
     private final VehicleTypes type;
-    public static final Vehicle NO_VEHICLE = new Vehicle(VehicleTypes.NONE);
-    /*todo 2 варианта есть: 1) селать приватный конструктор по умолчанию, без проверки формата и использовать его
-    2) сделать приватный метод инициализации пустыми строками без проверки формата и вызывать его
-    */
+    public static final Vehicle NO_VEHICLE = new Vehicle();
+    //todo 2 варианта есть: 1) селать приватный конструктор по умолчанию, без проверки формата и использовать его - done
+
+    private Vehicle() {
+        this.registrationNumber = "";
+        this.maker = "";
+        this.model = "";
+        this.type = VehicleTypes.NONE;
+    }
 
     public Vehicle(VehicleTypes type) throws IlleagalRegistrationNumberFormat {
         this("", "", "", type);
@@ -24,8 +29,7 @@ public final class Vehicle implements Cloneable {
         Objects.requireNonNull(type, "type - null");
 
         // Исключение illegalRegNumber
-        PatternCheck patternCheck = new PatternCheck(registrationNumber);
-        if (!patternCheck.check()) throw new IlleagalRegistrationNumberFormat();
+        if (!PatternCheck.check(registrationNumber)) throw new IlleagalRegistrationNumberFormat();
 
         // Конструктор
         this.registrationNumber = registrationNumber;
@@ -36,7 +40,7 @@ public final class Vehicle implements Cloneable {
 
     public String toString() {
         if (type.equals(Vehicle.NO_VEHICLE)) return "NONE";
-        else return String.format(maker + " " + model + " (" + type + ") " + "regNumber: " + registrationNumber); //todo это херня, а не формат
+        else return String.format("%s %s %s regNumber: %s",maker, model, type, registrationNumber); //todo это херня, а не формат - done
     }
 
     public int hashCode() {
@@ -45,7 +49,11 @@ public final class Vehicle implements Cloneable {
 
     public boolean equals(Object object) {
         //todo красавчик, строки сравнивать на ==.
-        return (object instanceof Vehicle && ((Vehicle) object).maker == maker && ((Vehicle) object).model == model && ((Vehicle) object).type == type && ((Vehicle) object).registrationNumber == registrationNumber);
+        return (object instanceof Vehicle &&
+                ((Vehicle) object).maker == maker &&
+                ((Vehicle) object).model == model &&
+                ((Vehicle) object).type == type &&
+                ((Vehicle) object).registrationNumber == registrationNumber);
     }
 
     public Object clone() throws CloneNotSupportedException{

@@ -20,8 +20,8 @@ public class Parking {
 
     //todo
     public String toString() {
-        //todo НИКАКОЙ КОНКАТЕНАЦИИ В БИЛДЕРЕ - ПАЧКА АПЕНДОВ
-        StringBuilder strBuild = new StringBuilder("Floors (" + size + " ): ");
+        //todo НИКАКОЙ КОНКАТЕНАЦИИ В БИЛДЕРЕ - ПАЧКА АПЕНДОВ - done
+        StringBuilder strBuild = new StringBuilder("Floors (").append(size).append(" ): ");
 
         for (int i = 0; i < size; i++) {
             strBuild.append('\n').append(floors[i].toString());
@@ -40,6 +40,7 @@ public class Parking {
     public boolean add (Floor floor) {
         // Исключение isNull
         Objects.requireNonNull(floor, "floor - null");
+
         if (floors.length == size) {
             floors = increase(floors);
         }
@@ -53,7 +54,7 @@ public class Parking {
         Objects.requireNonNull(floor, "floor - null");
 
         // Исключение illegalIndex
-        if (index < 0 || index >= size) throw new IndexOutOfBoundsException(); //todo
+        Objects.checkIndex(index, size); //todo - done
 
         if (floors.length == size) {
             floors = increase(floors);
@@ -66,7 +67,7 @@ public class Parking {
 
     public Floor get (int index) {
         // Исключение illegalIndex
-        if (index < 0 || index >= size) throw new IndexOutOfBoundsException(); //todo
+        Objects.checkIndex(index, size); //todo - done
 
         return floors[index];
     }
@@ -76,7 +77,7 @@ public class Parking {
         Objects.requireNonNull(floor, "floor - null");
 
         // Исключение illegalIndex
-        if (index < 0 || index >= size) throw new IndexOutOfBoundsException(); //todo
+        Objects.checkIndex(index, size); //todo - done
 
         Floor oldFloor = floors[index];
         floors[index] = floor;
@@ -85,7 +86,7 @@ public class Parking {
 
     public Floor remove (int index) {
         // Исключение illegalIndex
-        if (index < 0 || index >= size) throw new IndexOutOfBoundsException(); //todo
+        Objects.checkIndex(index, size); //todo - done
 
         Floor floor = floors[index];
         System.arraycopy(floors, index + 1, floors, index, size - index - 1 );
@@ -163,13 +164,6 @@ public class Parking {
 
 
     public Space getSpace (String registrationNumber) throws IlleagalRegistrationNumberFormat {
-        // Исключение isNull
-        Objects.requireNonNull(registrationNumber, "registrationNumber - null");
-
-        // Исключение illegalRegNumber
-        PatternCheck patternCheck = new PatternCheck(registrationNumber);
-        if (!patternCheck.check()) throw new IlleagalRegistrationNumberFormat();
-
         for (int i = 0; i < size; i++) {
             if (floors[i].hasSpace(registrationNumber))
                 return floors[i].get(registrationNumber);
@@ -180,9 +174,6 @@ public class Parking {
     }
 
     public Space removeSpace (String registrationNumber) throws IlleagalRegistrationNumberFormat {
-        // Исключение isNull
-        Objects.requireNonNull(registrationNumber, "registrationNumber - null");
-
         Space removedSpace = null;
         for (int i = 0; i < size; i++) {
             if (floors[i].hasSpace(registrationNumber)) {
@@ -196,7 +187,6 @@ public class Parking {
 
     public Space setSpace (Space space, String registrationNumber) throws IlleagalRegistrationNumberFormat {
         // Исключение isNull
-        Objects.requireNonNull(registrationNumber, "registrationNumber - null");
         Objects.requireNonNull(space, "space - null");
 
         Space oldSpace = null;

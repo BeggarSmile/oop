@@ -18,25 +18,15 @@ public abstract class AbstractSpace implements Space, Cloneable {
     }
 
     protected AbstractSpace(Person person, Vehicle vehicle, LocalDate sinceDate) {
-        // Исключения isNull
-        //todo а можно и методы set вызвать, чтоб не дублировать проверку и инициализацию полей...
-        Objects.requireNonNull(person, "person - null");
-        Objects.requireNonNull(vehicle, "vehicle - null");
-        Objects.requireNonNull(sinceDate, "sinceDate - null");
-
-        // Исключения IllegalDate
-        if (sinceDate.isAfter(LocalDate.now()))
-            throw new IllegalArgumentException("IllegalDate");
-
-        // Конструктор
-        this.person = person;
-        this.vehicle = vehicle;
-        this.sinceDate = sinceDate;
+        //todo а можно и методы set вызвать, чтоб не дублировать проверку и инициализацию полей... - done
+        setPerson(person);
+        setVehicle(vehicle);
+        setSinceDate(sinceDate);
     }
 
-    //todo это херня, а не формат.
+    //todo это херня, а не формат. - done
     public String toString() {
-        return String.format(person.toString() + " " + vehicle.toString() + " " + sinceDate);
+        return String.format("%s %s %s", person.toString(), vehicle.toString(), sinceDate);
     } //todo формат не формат =))
 
     public int hashCode() {
@@ -64,6 +54,9 @@ public abstract class AbstractSpace implements Space, Cloneable {
 
     public void setSinceDate(LocalDate sinceDate) {
         Objects.requireNonNull(sinceDate, "sinceDate - null");
+        if (sinceDate.isBefore(LocalDate.now()))
+            throw new IllegalArgumentException("IllegalDate");
+
         this.sinceDate = sinceDate;
     }
 

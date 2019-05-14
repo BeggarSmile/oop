@@ -3,26 +3,26 @@ import model.*;
 import java.sql.SQLOutput;
 import java.time.LocalDate;
 
-public class SecondTest {
-    public static void main (String[] args) {
+public class SecondTest{
+    public static void main (String[] args) throws IlleagalRegistrationNumberFormat{
         System.out.println("Я сделяль!");
         lab1tests();
     }
 
-    public static void lab1tests() {
+    public static void lab1tests() throws IlleagalRegistrationNumberFormat {
         //Tests class Person
-        Person person_1 = new Person ("Name1", "LastName1");
-        Person person_2 = new Person ("Name2", "LastName2");
-        Person person_3 = new Person ("Name3", "LastName3");
-        Person person_4 = new Person ("Name4", "LastName4");
-        Person person_5 = new Person ("Name5", "LastName5");
+        Person person_1 = new Person("Name1", "LastName1");
+        Person person_2 = new Person("Name2", "LastName2");
+        Person person_3 = new Person("Name3", "LastName3");
+        Person person_4 = new Person("Name4", "LastName4");
+        Person person_5 = new Person("Name5", "LastName5");
 
         //Tests class Vehicle
         Vehicle vehicle_1 = new Vehicle("A111AA11", "Maker1", "Pattern1", VehicleTypes.CAR);
-        Vehicle vehicle_2 = new Vehicle("RegNumber2", "Maker2", "Pattern2", VehicleTypes.CROSSOVER);
-        Vehicle vehicle_3 = new Vehicle("RegNumber3", "Maker3", "Pattern3", VehicleTypes.MOTOR_BIKE);
-        Vehicle vehicle_4 = new Vehicle("RegNumber4", "Maker4", "Pattern4", VehicleTypes.SUV);
-        Vehicle vehicle_5 = new Vehicle("RegNumber5", "Maker5", "Pattern5", VehicleTypes.TRUCK);
+        Vehicle vehicle_2 = new Vehicle("B222BB22", "Maker2", "Pattern2", VehicleTypes.CROSSOVER);
+        Vehicle vehicle_3 = new Vehicle("C333CC33", "Maker3", "Pattern3", VehicleTypes.MOTOR_BIKE);
+        Vehicle vehicle_4 = new Vehicle("E444EE44", "Maker4", "Pattern4", VehicleTypes.SUV);
+        Vehicle vehicle_5 = new Vehicle("K555KK55", "Maker5", "Pattern5", VehicleTypes.TRUCK);
 
         //Tests class RentedSpace
         Space rentedSpace_1 = new RentedSpace(person_1, vehicle_1, LocalDate.now(), LocalDate.now().plusDays(1));
