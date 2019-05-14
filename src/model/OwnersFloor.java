@@ -2,6 +2,7 @@ package model;
 
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
@@ -25,7 +26,6 @@ public class OwnersFloor implements Floor, Cloneable {
         this.spaces = newSpaces;
     }
 
-    //todo чет не работает, не забудь спросить - done
     public String toString() {
         StringBuilder strBuild = new StringBuilder("Spaces: ");
 
@@ -53,16 +53,14 @@ public class OwnersFloor implements Floor, Cloneable {
     }
 
     public boolean equals(Object object) {
-        //todo сравниваем size и содержимое массивов - done
         if (!(object instanceof OwnersFloor && ((OwnersFloor) object).size == size)) {
             return false;
         }
-        else {
             for (int i = 0; i < size; i++) {
                 if (!((OwnersFloor) object).spaces[i].equals(spaces[i]))
                     return false;
             }
-        }
+
         return true;
     }
 
@@ -71,8 +69,6 @@ public class OwnersFloor implements Floor, Cloneable {
         for (int i = 0; i < size; i++) {
             clone.spaces[i] = spaces.clone()[i];
         }
-        //todo каждый space по отдельности тоже клонируем - done
-
         return clone;
     }
 
@@ -120,7 +116,6 @@ public class OwnersFloor implements Floor, Cloneable {
         return count;
     }
 
-    //todo имя говно - done
     public boolean hasRentedSpace() {
         for (int i = 0; i < spaces.length; i++) {
             if (spaces[i] instanceof RentedSpace) return true;
@@ -141,10 +136,9 @@ public class OwnersFloor implements Floor, Cloneable {
 
     public LocalDate nearestRentEndsDate() {
         int index = searchFirstRentedSpace();
-        LocalDate minDate = spaces[index].getSinceDate(); //todo надо найти первый RentEndsDate - done
+        LocalDate minDate = spaces[index].getSinceDate();
 
         for (int i = index; i < size; i++) {
-            //todo проверка что space - Rented - done
             if (spaces[i] instanceof RentedSpace)
                 if (spaces[i].getSinceDate().isBefore(minDate))
                     minDate = spaces[i].getSinceDate();
@@ -153,7 +147,6 @@ public class OwnersFloor implements Floor, Cloneable {
         return minDate;
     }
 
-    //todo налогично предыдущему - done
     public Space spaceWithNearestRentEndsDate() {
 
         LocalDate minDate = nearestRentEndsDate();
@@ -165,7 +158,7 @@ public class OwnersFloor implements Floor, Cloneable {
                     return spaces[i];
         }
 
-        return null;
+        return spaces[index];
     }
 
     public boolean add (Space space) {
@@ -187,7 +180,7 @@ public class OwnersFloor implements Floor, Cloneable {
         // Исключение illegalIndex
         Objects.checkIndex(index, size);
 
-        Objects.checkIndex(index, size); //todo чеки индекса делай так
+        Objects.checkIndex(index, size);
 
         if (spaces.length == size) {
             spaces = increase(spaces);
@@ -214,8 +207,6 @@ public class OwnersFloor implements Floor, Cloneable {
     public int getIndex (Space space) throws IlleagalRegistrationNumberFormat {
         // Исключение isNull
         Objects.requireNonNull(space, "space - null");
-
-        //todo бегаем по спэйсам и чекаем их на equals - done
         for (int i = 0; i < size; i++) {
             if (spaces[i].equals(space)) return i;
         }
@@ -261,16 +252,12 @@ public class OwnersFloor implements Floor, Cloneable {
     public boolean remove (Space space) throws IlleagalRegistrationNumberFormat {
         // Исключение isNull
         Objects.requireNonNull(space, "space - null");
-
-        //todo надо Space.equals() использовать - done
-        if (hasSpace(space.getVehicle().getRegistrationNumber())) {
-            for (int i = 0; i < size; i++) {
+         for (int i = 0; i < size; i++) {
                 if (space.equals(spaces[i])) {
                     remove(i);
                     return true;
                 }
             }
-        }
         return false;
     }
 

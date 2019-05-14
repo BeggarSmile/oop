@@ -20,7 +20,6 @@ public class Parking {
 
     //todo
     public String toString() {
-        //todo НИКАКОЙ КОНКАТЕНАЦИИ В БИЛДЕРЕ - ПАЧКА АПЕНДОВ - done
         StringBuilder strBuild = new StringBuilder("Floors (").append(size).append(" ): ");
 
         for (int i = 0; i < size; i++) {
@@ -54,7 +53,7 @@ public class Parking {
         Objects.requireNonNull(floor, "floor - null");
 
         // Исключение illegalIndex
-        Objects.checkIndex(index, size); //todo - done
+        Objects.checkIndex(index, size);
 
         if (floors.length == size) {
             floors = increase(floors);
@@ -67,7 +66,7 @@ public class Parking {
 
     public Floor get (int index) {
         // Исключение illegalIndex
-        Objects.checkIndex(index, size); //todo - done
+        Objects.checkIndex(index, size);
 
         return floors[index];
     }
@@ -77,7 +76,7 @@ public class Parking {
         Objects.requireNonNull(floor, "floor - null");
 
         // Исключение illegalIndex
-        Objects.checkIndex(index, size); //todo - done
+        Objects.checkIndex(index, size);
 
         Floor oldFloor = floors[index];
         floors[index] = floor;
@@ -86,7 +85,7 @@ public class Parking {
 
     public Floor remove (int index) {
         // Исключение illegalIndex
-        Objects.checkIndex(index, size); //todo - done
+        Objects.checkIndex(index, size);
 
         Floor floor = floors[index];
         System.arraycopy(floors, index + 1, floors, index, size - index - 1 );

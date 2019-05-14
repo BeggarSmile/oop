@@ -7,7 +7,7 @@ public final class Person implements Cloneable{
     private final String lastName;
     public static final Person UNKNOWN_PERSON = new Person("","");
 
-    public Person (String name, String lastName) { //todo в throws включаются checked исключения. unchecked - на надо - done
+    public Person (String name, String lastName) {
         // Исключения isNull
         Objects.requireNonNull(name, "name - null");
         Objects.requireNonNull(lastName, "lastName - null");
@@ -18,7 +18,7 @@ public final class Person implements Cloneable{
     }
 
     public String toString() {
-        return String.format("%s %s", lastName, firstName); //todo это не формат. Это какая-то херня - done
+        return String.format("%s %s", lastName, firstName);
     }
 
     public int hashCode() {

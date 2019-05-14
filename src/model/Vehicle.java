@@ -8,7 +8,6 @@ public final class Vehicle implements Cloneable {
     private final String model;
     private final VehicleTypes type;
     public static final Vehicle NO_VEHICLE = new Vehicle();
-    //todo 2 варианта есть: 1) селать приватный конструктор по умолчанию, без проверки формата и использовать его - done
 
     private Vehicle() {
         this.registrationNumber = "";
@@ -40,7 +39,7 @@ public final class Vehicle implements Cloneable {
 
     public String toString() {
         if (type.equals(Vehicle.NO_VEHICLE)) return "NONE";
-        else return String.format("%s %s %s regNumber: %s",maker, model, type, registrationNumber); //todo это херня, а не формат - done
+        else return String.format("%s %s %s regNumber: %s",maker, model, type, registrationNumber);
     }
 
     public int hashCode() {
@@ -49,6 +48,7 @@ public final class Vehicle implements Cloneable {
 
     public boolean equals(Object object) {
         //todo красавчик, строки сравнивать на ==.
+        if (this == object) return true;
         return (object instanceof Vehicle &&
                 ((Vehicle) object).maker == maker &&
                 ((Vehicle) object).model == model &&

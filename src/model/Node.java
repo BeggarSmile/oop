@@ -23,7 +23,7 @@ class Node implements Cloneable{
 
     public Node clone() throws CloneNotSupportedException{
         Node clone = (Node)super.clone();
-
+        clone.value = value.clone();
         return clone;
     }
 }

@@ -21,11 +21,13 @@ public class RentedSpace extends AbstractSpace implements Cloneable {
         setRentEndsDate(rentEndsDate);
     }
 
-    //todo а где equals? - done
 
     public boolean equals(Object object) {
-        return (object instanceof RentedSpace &&
-                ((RentedSpace) object).getPerson().equals(super.getPerson()) &&
+        if (!(object instanceof RentedSpace))
+                return false;
+        RentedSpace space = (RentedSpace) object;
+        //todo
+                return space.getPerson().equals(super.getPerson()) &&
                 ((RentedSpace) object).getVehicle().equals(super.getVehicle()) &&
                 ((RentedSpace) object).getSinceDate().equals(super.getSinceDate()) &&
                 ((RentedSpace) object).getPeriod().equals(super.getPeriod()) &&
@@ -33,7 +35,7 @@ public class RentedSpace extends AbstractSpace implements Cloneable {
     }
 
     public String toString() {
-        return String.format("%s %s", super.toString(), rentEndsDate); //todo это херня, а не формат - done
+        return String.format("%s %s", super.toString(), rentEndsDate);
     }
 
     public int hashCode() {
