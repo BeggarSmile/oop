@@ -3,6 +3,7 @@ package model;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
@@ -25,6 +26,30 @@ public class OwnersFloor implements Floor, Cloneable {
         Space[] newSpaces = new Space[size * 2];
         System.arraycopy(spaces,0,newSpaces ,0, size);
         this.spaces = newSpaces;
+    }
+
+    private class SpaceIterator implements java.util.Iterator<Space>{
+        Space[] spaceIter;
+        int indexPosition = 0;
+
+        public SpaceIterator(Space[] spaces) {
+            this.spaceIter = spaces;
+        }
+
+        public boolean hasNext() {
+            return size >= indexPosition + 1;
+        }
+
+        public Space next() {
+            if (!this.hasNext()) throw new NoSuchElementException();
+            Space nextSpace = spaceIter[indexPosition];
+            this.indexPosition++;
+            return nextSpace;
+        }
+    }
+
+    public Iterator<Space> iterator() {
+        return new SpaceIterator(spaces);
     }
 
     public String toString() {
@@ -84,20 +109,6 @@ public class OwnersFloor implements Floor, Cloneable {
             return spaces;
     }
 
-    public int indexOf (String registrationNumber) throws IlleagalRegistrationNumberFormat {
-        // Исключение isNull
-        Objects.requireNonNull(registrationNumber, "registrationNumber - null");
-
-        // Исключение illegalRegNumber
-        PatternCheck.check(registrationNumber);
-
-        for (int i = 0; i < size; i++) {
-            if (spaces[i].getVehicle().getRegistrationNumber().equals(registrationNumber))
-                return i;
-        }
-        return -1;
-    }
-
     public int vehiclesQuantity() {
         int count = 0;
         for (int i = 0; i < size; i++) {
@@ -127,43 +138,6 @@ public class OwnersFloor implements Floor, Cloneable {
         }
 
         return false;
-    }
-
-    public int searchFirstRentedSpace() {
-        if (!hasRentedSpace()) throw new NoRentedSpaceException();
-
-        for (int i = 0; i < size; i++) {
-            if (spaces[i] instanceof RentedSpace) return i;
-        }
-
-        return -1;
-    }
-
-    public LocalDate nearestRentEndsDate() {
-        int index = searchFirstRentedSpace();
-        LocalDate minDate = spaces[index].getSinceDate();
-
-        for (int i = index; i < size; i++) {
-            if (spaces[i] instanceof RentedSpace)
-                if (spaces[i].getSinceDate().isBefore(minDate))
-                    minDate = spaces[i].getSinceDate();
-        }
-
-        return minDate;
-    }
-
-    public Space spaceWithNearestRentEndsDate() {
-
-        LocalDate minDate = nearestRentEndsDate();
-        int index = searchFirstRentedSpace();
-
-        for (int i = index; i < size; i++) {
-            if (spaces[i] instanceof RentedSpace)
-                if (spaces[i].getSinceDate() == minDate)
-                    return spaces[i];
-        }
-
-        return spaces[index];
     }
 
     public boolean add (Space space) {
@@ -203,12 +177,6 @@ public class OwnersFloor implements Floor, Cloneable {
         return spaces[index];
     }
 
-    public Space get (String registrationNumber) throws IlleagalRegistrationNumberFormat {
-        int index = indexOf(registrationNumber);
-        if (index == -1 ) throw new NoSuchElementException();
-        return spaces[index];
-    }
-
     public int getIndex (Space space) throws IlleagalRegistrationNumberFormat {
         // Исключение isNull
         Objects.requireNonNull(space, "space - null");
@@ -217,10 +185,6 @@ public class OwnersFloor implements Floor, Cloneable {
         }
 
         throw new NoSuchElementException();
-    }
-
-    public boolean hasSpace (String registrationNumber) throws IlleagalRegistrationNumberFormat {
-        return indexOf(registrationNumber) != -1;
     }
 
     public Space set (int index, Space space) {
@@ -246,14 +210,6 @@ public class OwnersFloor implements Floor, Cloneable {
         return space;
     }
 
-    public Space remove (String registrationNumber) throws IlleagalRegistrationNumberFormat {
-        int index = indexOf(registrationNumber);
-        if (index != -1) return remove(index);
-
-        // Исключение noSuchElement
-        else throw new NoSuchElementException();
-    }
-
     public boolean remove (Space space) throws IlleagalRegistrationNumberFormat {
         // Исключение isNull
         Objects.requireNonNull(space, "space - null");
@@ -276,59 +232,4 @@ public class OwnersFloor implements Floor, Cloneable {
         return newSpace;
     }
 
-    public Vehicle[] getVehicles() {
-        Vehicle[] newVehicles = new Vehicle[vehiclesQuantity()];
-        int count = 0;
-
-        for (int i = 0; i < size; i++) {
-            if (spaces[i].isEmpty()) {
-                newVehicles[count] = spaces[i].getVehicle();
-                count++;
-            }
-        }
-
-        return newVehicles;
-    }
-
-    public Space[] getSpaces(VehicleTypes type) {
-        // Исключение isNull
-        Objects.requireNonNull(type, "type - null");
-
-        Space[] newSpaces = new Space[vehiclesQuantity(type)];
-        int count = 0;
-
-        for (int i = 0; i < size; i++) {
-            if (!spaces[i].isEmpty() && spaces[i].getVehicle().getType() == type) {
-                newSpaces[count] = spaces[i];
-                count++;
-            }
-        }
-        return newSpaces;
-    }
-
-    public int getSpaces(Person person) {
-        // Исключение isNull
-        Objects.requireNonNull(person, "person - null");
-
-        int count = 0;
-
-        for (int i = 0; i < size; i++) {
-            if (spaces[i].getPerson() == person) count++;
-        }
-
-        return count;
-    }
-
-    public Space[] getEmptySpaces() {
-        Space[] emptySpaces = new Space[size - vehiclesQuantity()];
-        int count = 0;
-
-        for (int i = 0; i < size; i++) {
-            if (!spaces[i].isEmpty()) {
-                emptySpaces[count] = spaces[i];
-                count++;
-            }
-        }
-        return emptySpaces;
-    }
 }

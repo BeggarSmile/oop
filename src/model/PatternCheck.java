@@ -8,7 +8,7 @@ public class PatternCheck {
 
     public static void check(String registrationNumber) throws IlleagalRegistrationNumberFormat {
         Matcher matcher = pattern.matcher(registrationNumber);
-        if (matcher.matches())
+        if (!matcher.matches())
             throw new IlleagalRegistrationNumberFormat();
     }
 }

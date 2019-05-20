@@ -52,6 +52,7 @@ public class SecondTest{
         System.out.println(Park.getFloors()[0].remove(0));
         System.out.println(Park.getFloors()[0].get(0).getPerson().getFirstName());
         System.out.println(vehicle_1.toString());
+        System.out.println(ownersFloor_2.compareTo(ownersFloor_2));
 
     }
 }

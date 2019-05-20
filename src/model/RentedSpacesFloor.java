@@ -1,19 +1,45 @@
 package model;
 
 import java.time.LocalDate;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
-public class RentedSpacesFloor implements Floor, Cloneable{
+public class RentedSpacesFloor implements Floor, Cloneable {
 
     private Node head = new Node(null);
-    private Integer size;
+    private Integer size = 0;
 
     public RentedSpacesFloor(Space[] spaces) {
         for (int i = 0; i < spaces.length; i++) {
             addLast(new Node(spaces[i]));
         }
     }
+
+    private class SpaceIterator implements Iterator<Space>{
+        Space[] spaceIter;
+        int indexPosition = 0;
+
+        public SpaceIterator(Space[] spaces) {
+            this.spaceIter = spaces;
+        }
+
+        public boolean hasNext() {
+            return size >= indexPosition + 1;
+        }
+
+        public Space next() {
+            if (!hasNext()) throw new NoSuchElementException();
+            Space spaceNext = spaceIter[indexPosition];
+            indexPosition++;
+            return spaceNext;
+        }
+    }
+
+    public Iterator<Space> iterator() {
+        return new SpaceIterator(getSpaces());
+    }
+
     private boolean addLast(Node node) {
         if (size == 0) {
             head.next = node;
@@ -179,46 +205,6 @@ public class RentedSpacesFloor implements Floor, Cloneable{
         return false;
     }
 
-    public Node searchFirstRentedSpace() {
-        if (!hasRentedSpace()) throw new NoRentedSpaceException();
-
-        Node node = head;
-
-        for (int i = 0; i < size; i++) {
-            node = node.next;
-            if (node.value instanceof RentedSpace) return node;
-        }
-
-        return null;
-    }
-
-    public LocalDate nearestRentEndsDate() {
-        Node node = head;
-        LocalDate minDate = searchFirstRentedSpace().value.getSinceDate();
-
-        for (int i = 0; i < size; i++) {
-            node = node.next;
-            if (node.value instanceof RentedSpace)
-                if (node.value.getSinceDate().isBefore(minDate))
-                    minDate = node.value.getSinceDate();
-        }
-
-        return minDate;
-    }
-
-    public Space spaceWithNearestRentEndsDate() {
-        Node node = searchFirstRentedSpace();
-        LocalDate minDate = ((RentedSpace)node.value).getRentEndsDate();
-
-        for (int i = 0; i < size; i++) {
-            node = node.next;
-            if (node.value instanceof RentedSpace)
-                if (node.value.getSinceDate() == minDate)
-                    return node.value;
-        }
-        return node.value;
-    }
-
     public int vehiclesQuantity() {
         Node node = head;
         int count = 0;
@@ -246,22 +232,6 @@ public class RentedSpacesFloor implements Floor, Cloneable{
         return count;
     }
 
-    public int indexOf(String registrationNumber) throws IlleagalRegistrationNumberFormat {
-        // Исключение isNull
-        Objects.requireNonNull(registrationNumber, "registrationNumber - null");
-
-        // Исключение illegalRegNumber
-        PatternCheck.check(registrationNumber);
-
-        Node node = head;
-        for (int i = 0; i < size; i++) {
-            node = node.next;
-            if (node.value.getVehicle().getRegistrationNumber().equals(registrationNumber))
-                return i;
-        }
-        return -1;
-    }
-
     public boolean add(Space space) {
         // Исключение isNull
         Objects.requireNonNull(space, "space - null");
@@ -284,17 +254,8 @@ public class RentedSpacesFloor implements Floor, Cloneable{
         return getNode(index).value;
     }
 
-    public Space get(String registrationNumber) throws IlleagalRegistrationNumberFormat {
-        if (!hasSpace(registrationNumber)) throw new NoSuchElementException();
-        return getNode(indexOf(registrationNumber)).value;
-    }
-
     public int getIndex(Space space) throws IlleagalRegistrationNumberFormat {
         return indexOf(space.getVehicle().getRegistrationNumber());
-    }
-
-    public boolean hasSpace(String registrationNumber) throws IlleagalRegistrationNumberFormat {
-        return indexOf(registrationNumber) != -1;
     }
 
     public Space set(int index, Space space) {
@@ -305,13 +266,6 @@ public class RentedSpacesFloor implements Floor, Cloneable{
     }
 
     public Space remove(int index) {
-        return removeNode(index);
-    }
-
-    public Space remove(String registrationNumber) throws IlleagalRegistrationNumberFormat {
-        int index = indexOf(registrationNumber);
-        if (index == -1)
-            throw new NoSuchElementException();
         return removeNode(index);
     }
 
@@ -343,65 +297,6 @@ public class RentedSpacesFloor implements Floor, Cloneable{
         }
 
         return spaces;
-    }
-
-    public Vehicle[] getVehicles() {
-        Vehicle[] vehicles = new Vehicle[vehiclesQuantity()];
-        int count = 0;
-        Node node = head;
-        for (int i = 0; i < size; i++) {
-            node = node.next;
-            if (node.value.getVehicle() != null) {
-                vehicles[count] = node.value.getVehicle();
-                count++;
-            }
-        }
-        return vehicles;
-    }
-
-    public Space[] getSpaces(VehicleTypes type) {
-        // Исключение isNull
-        Objects.requireNonNull(type, "type - null");
-
-        Space[] newSpaces = new Space[vehiclesQuantity(type)];
-        int count = 0;
-        Node node = head;
-        for (int i = 0; i < size; i++) {
-            node = node.next;
-            if (!node.value.isEmpty() && node.value.getVehicle().getType() == type) {
-                newSpaces[count] = node.value;
-                count++;
-            }
-        }
-        return newSpaces;
-    }
-
-    public int getSpaces(Person person) {
-        // Исключение isNull
-        Objects.requireNonNull(person, "person - null");
-
-        int count = 0;
-        Node node = head;
-
-        for (int i = 0; i < size; i++) {
-            node = node.next;
-            if (node.value.getPerson() == person) count++;
-        }
-
-        return count;
-    }
-
-    public Space[] getEmptySpaces() {
-        Space[] emptySpaces = new Space[size - vehiclesQuantity()];
-        int count = 0;
-        Node node = head;
-        for (int i = 0; i < size; i++) {
-            if (!node.value.isEmpty()) {
-                emptySpaces[count] = node.value;
-                count++;
-            }
-        }
-        return emptySpaces;
     }
 
 }

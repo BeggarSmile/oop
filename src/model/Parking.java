@@ -1,11 +1,12 @@
 package model;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-public class Parking {
+public class Parking implements Iterable<Floor>{
     private Floor[] floors;
     private int size;
 
@@ -17,6 +18,30 @@ public class Parking {
         size = floors.length;
         this.floors = new Floor[size];
         System.arraycopy(floors, 0 , this.floors, 0, size);
+    }
+
+    private class ParkingIterator implements Iterator<Floor> {
+        Floor[] floorsIter;
+        int indexPosition = 0;
+
+        public ParkingIterator(Floor[] floors) {
+            this.floorsIter = floors;
+        }
+
+        public boolean hasNext() {
+            return size >= indexPosition + 1;
+        }
+
+        public Floor next() {
+            if (!hasNext()) throw new NoSuchElementException();
+            Floor nextFloor = floorsIter[indexPosition];
+            indexPosition++;
+            return nextFloor;
+        }
+    }
+
+    public Iterator<Floor> iterator() {
+        return new ParkingIterator(floors);
     }
 
     public String toString() {
@@ -110,8 +135,8 @@ public class Parking {
 
         int count = 0;
 
-        for (int i = 0; i < size; i++) {
-            if (floors[i].getSpaces(person) != 0) count++;
+        for (Floor floor : floors) {
+            if (floor.getSpaces(person) != 0) count++;
         }
 
         Floor[] newFloors = new Floor[count];
@@ -128,7 +153,6 @@ public class Parking {
     }
 
     public Floor[] sortedBySizeFloors() {
-
         Floor[] newFloors = getFloors();
         Arrays.sort(newFloors);
         return newFloors;
@@ -136,16 +160,16 @@ public class Parking {
 
     public Vehicle[] getVehicles () {
         int vehiclesQuantity = 0;
-        for (int i = 0; i < size; i++) {
-            vehiclesQuantity += floors[i].vehiclesQuantity();
+        for (Floor floor : floors) {
+            vehiclesQuantity += floor.vehiclesQuantity();
         }
 
         Vehicle[] allVehicles = new Vehicle[vehiclesQuantity];
         vehiclesQuantity = 0;
-
         Vehicle[] vehicles;
-        for (int i = 0; i < size; i++) {
-            vehicles = floors[i].getVehicles();
+
+        for (Floor floor : floors) {
+            vehicles = floor.getVehicles();
             System.arraycopy(vehicles, 0, allVehicles, vehiclesQuantity, vehicles.length);
             vehiclesQuantity += vehicles.length;
         }
@@ -155,9 +179,9 @@ public class Parking {
 
 
     public Space getSpace (String registrationNumber) throws IlleagalRegistrationNumberFormat {
-        for (int i = 0; i < size; i++) {
-            if (floors[i].hasSpace(registrationNumber))
-                return floors[i].get(registrationNumber);
+        for (Floor floor : floors) {
+            if (floor.hasSpace(registrationNumber))
+                return  floor.get(registrationNumber);
         }
 
         // Исключение noSuchElement
@@ -165,10 +189,9 @@ public class Parking {
     }
 
     public Space removeSpace (String registrationNumber) throws IlleagalRegistrationNumberFormat {
-        Space removedSpace = null;
-        for (int i = 0; i < size; i++) {
-            if (floors[i].hasSpace(registrationNumber)) {
-                return floors[i].remove(registrationNumber);
+        for (Floor floor : floors) {
+            if (floor.hasSpace(registrationNumber)) {
+                return  floor.remove(registrationNumber);
             }
         }
 
@@ -180,11 +203,12 @@ public class Parking {
         // Исключение isNull
         Objects.requireNonNull(space, "space - null");
 
-        Space oldSpace = null;
-        for (int i = 0; i < size; i++) {
-            if (floors[i].indexOf(registrationNumber) != -1) {
-                return floors[i].set(i, space);
+        int index = 0;
+        for (Floor floor : floors) {
+            if (floor.indexOf(registrationNumber) != -1) {
+                return floor.set(index, space);
             }
+            index++;
         }
 
         // Исключение noSuchElement
@@ -194,12 +218,12 @@ public class Parking {
     public int emptySpacesQuantity() {
         int quantity = 0;
 
-        for (int i = 0; i < size; i++) {
-            quantity += floors[i].size();
+        for (Floor floor : floors) {
+            quantity += floor.size();
         }
 
-        for (int i = 0; i < size; i++) {
-            quantity -= floors[i].vehiclesQuantity();
+        for (Floor floor : floors) {
+            quantity -= floor.vehiclesQuantity();
         }
 
         return quantity;
@@ -211,8 +235,8 @@ public class Parking {
 
         int quantity = 0;
 
-        for (int i = 0; i < size; i++) {
-            quantity += floors[i].vehiclesQuantity(type);
+        for (Floor floor : floors) {
+            quantity += floor.vehiclesQuantity(type);
         }
 
         return quantity;
