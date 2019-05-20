@@ -26,10 +26,10 @@ public final class Person implements Cloneable{
     }
 
     public boolean equals(Object object) {
-        //todo красавчик, строки сравнивать на ==.
+        //todo красавчик, строки сравнивать на ==. - done
         return (object instanceof Person &&
-                ((Person) object).lastName == lastName &&
-                ((Person) object).firstName == firstName);
+                ((Person) object).lastName.equals(lastName) &&
+                ((Person) object).firstName.equals(firstName));
     }
 
     public Object clone() throws CloneNotSupportedException{

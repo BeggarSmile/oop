@@ -28,7 +28,7 @@ public final class Vehicle implements Cloneable {
         Objects.requireNonNull(type, "type - null");
 
         // Исключение illegalRegNumber
-        if (!PatternCheck.check(registrationNumber)) throw new IlleagalRegistrationNumberFormat();
+        PatternCheck.check(registrationNumber);
 
         // Конструктор
         this.registrationNumber = registrationNumber;
@@ -47,13 +47,13 @@ public final class Vehicle implements Cloneable {
     }
 
     public boolean equals(Object object) {
-        //todo красавчик, строки сравнивать на ==.
+        //todo красавчик, строки сравнивать на ==. - done
         if (this == object) return true;
         return (object instanceof Vehicle &&
-                ((Vehicle) object).maker == maker &&
-                ((Vehicle) object).model == model &&
-                ((Vehicle) object).type == type &&
-                ((Vehicle) object).registrationNumber == registrationNumber);
+                ((Vehicle) object).maker.equals(maker) &&
+                ((Vehicle) object).model.equals(model) &&
+                ((Vehicle) object).type.equals(type) &&
+                ((Vehicle) object).registrationNumber.equals(registrationNumber));
     }
 
     public Object clone() throws CloneNotSupportedException{

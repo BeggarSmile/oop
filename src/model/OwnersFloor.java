@@ -7,7 +7,8 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public class OwnersFloor implements Floor, Cloneable {
-    private int size;
+
+    private Integer size;
     private Space[] spaces;
     private static final int CAPACITY_DEFAULT = 16;
 
@@ -64,12 +65,16 @@ public class OwnersFloor implements Floor, Cloneable {
         return true;
     }
 
-    public Object clone() throws CloneNotSupportedException{
+    public Object clone() throws CloneNotSupportedException {
         OwnersFloor clone = (OwnersFloor)super.clone();
         for (int i = 0; i < size; i++) {
             clone.spaces[i] = spaces.clone()[i];
         }
         return clone;
+    }
+
+    public int compareTo(Floor floor) {
+        return this.size.compareTo(floor.size());
     }
 
     public Space[] increase (Space[] spaces) {
@@ -84,7 +89,7 @@ public class OwnersFloor implements Floor, Cloneable {
         Objects.requireNonNull(registrationNumber, "registrationNumber - null");
 
         // Исключение illegalRegNumber
-        if (!PatternCheck.check(registrationNumber)) throw new IlleagalRegistrationNumberFormat();
+        PatternCheck.check(registrationNumber);
 
         for (int i = 0; i < size; i++) {
             if (spaces[i].getVehicle().getRegistrationNumber().equals(registrationNumber))

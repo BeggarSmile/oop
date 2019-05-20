@@ -7,7 +7,7 @@ import java.util.Objects;
 public class RentedSpacesFloor implements Floor, Cloneable{
 
     private Node head = new Node(null);
-    private int size;
+    private Integer size;
 
     public RentedSpacesFloor(Space[] spaces) {
         for (int i = 0; i < spaces.length; i++) {
@@ -150,7 +150,7 @@ public class RentedSpacesFloor implements Floor, Cloneable{
         return true;
     }
 
-    //todo протесть
+    //todo протесть - done
     public Object clone() throws CloneNotSupportedException{
         RentedSpacesFloor clone = (RentedSpacesFloor)super.clone();
         clone.head = head.clone();
@@ -162,6 +162,10 @@ public class RentedSpacesFloor implements Floor, Cloneable{
         }
         node.next = clone.head.next;
         return clone;
+    }
+
+    public int compareTo(Floor floor) {
+        return this.size.compareTo(floor.size());
     }
 
     public boolean hasRentedSpace() {
@@ -312,10 +316,15 @@ public class RentedSpacesFloor implements Floor, Cloneable{
     }
 
     public boolean remove(Space space) throws IlleagalRegistrationNumberFormat {
-        //todo space.equals()
-        if (hasSpace(space.getVehicle().getRegistrationNumber())){
-            remove(space.getVehicle().getRegistrationNumber());
-            return true;
+        //todo space.equals() - done
+        Node node = head;
+
+        for (int i = 0; i < size; i++) {
+            node = node.next;
+            if (node.value.equals(space)) {
+                remove(i);
+                return true;
+            }
         }
         return false;
     }

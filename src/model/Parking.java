@@ -1,5 +1,6 @@
 package model;
 
+import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -18,7 +19,6 @@ public class Parking {
         System.arraycopy(floors, 0 , this.floors, 0, size);
     }
 
-    //todo
     public String toString() {
         StringBuilder strBuild = new StringBuilder("Floors (").append(size).append(" ): ");
 
@@ -130,15 +130,7 @@ public class Parking {
     public Floor[] sortedBySizeFloors() {
 
         Floor[] newFloors = getFloors();
-        for (int j = 0; j < size - 1; j++) {
-            for (int i = 0; i < size - 1; i++) {
-                if (newFloors[i].size() > newFloors[i + 1].size()) {
-                    Floor newFloor = newFloors[i];
-                    newFloors[i] = newFloors[i + 1];
-                    newFloors[i + 1] = newFloor;
-                }
-            }
-        }
+        Arrays.sort(newFloors);
         return newFloors;
     }
 

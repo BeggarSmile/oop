@@ -38,7 +38,7 @@ public abstract class AbstractSpace implements Space, Cloneable {
                 ((AbstractSpace) object).sinceDate.equals(sinceDate));
     }
 
-    protected Space clone() throws CloneNotSupportedException{
+    public Space clone() throws CloneNotSupportedException{
         AbstractSpace clone = (AbstractSpace)super.clone();
         clone.vehicle = (Vehicle)vehicle.clone();
         clone.person = (Person)person.clone();

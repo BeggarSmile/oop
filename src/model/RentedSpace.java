@@ -26,12 +26,12 @@ public class RentedSpace extends AbstractSpace implements Cloneable {
         if (!(object instanceof RentedSpace))
                 return false;
         RentedSpace space = (RentedSpace) object;
-        //todo
+        //todo - done
                 return space.getPerson().equals(super.getPerson()) &&
-                ((RentedSpace) object).getVehicle().equals(super.getVehicle()) &&
-                ((RentedSpace) object).getSinceDate().equals(super.getSinceDate()) &&
-                ((RentedSpace) object).getPeriod().equals(super.getPeriod()) &&
-                ((RentedSpace) object).getRentEndsDate().equals(rentEndsDate));
+                space.getVehicle().equals(super.getVehicle()) &&
+                space.getSinceDate().equals(super.getSinceDate()) &&
+                space.getPeriod().equals(super.getPeriod()) &&
+                space.getRentEndsDate().equals(rentEndsDate);
     }
 
     public String toString() {
@@ -42,7 +42,7 @@ public class RentedSpace extends AbstractSpace implements Cloneable {
         return (53 * super.hashCode());
     }
 
-    public Object clone() throws CloneNotSupportedException{
+    public Space clone() throws CloneNotSupportedException{
         RentedSpace clone = (RentedSpace)super.clone();
         return clone;
     }
