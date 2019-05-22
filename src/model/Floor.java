@@ -17,7 +17,7 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>{
 
     default LocalDate nearestRentEndsDate() {
         LocalDate minDate = null;
-        for (Space space : getSpaces()) {
+        for (Space space : this) {
             if (space instanceof RentedSpace) {
                 if (minDate == null) minDate = space.getSinceDate();
                 else if (minDate.isBefore(space.getSinceDate()))
@@ -31,7 +31,7 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>{
     default Space spaceWithNearestRentEndsDate() {
         LocalDate minDate = nearestRentEndsDate();
 
-        for (Space space : getSpaces()) {
+        for (Space space : this) {
             if (space instanceof RentedSpace)
                 if (space.getSinceDate().isEqual(minDate))
                     return space;
@@ -48,7 +48,7 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>{
 
     default Space get(String registrationNumber) throws IlleagalRegistrationNumberFormat{
         PatternCheck.check(registrationNumber);
-        for (Space space : getSpaces()) {
+        for (Space space : this) {
             if (space.getVehicle().getRegistrationNumber().equals(registrationNumber))
                 return space;
         }
@@ -59,7 +59,7 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>{
 
     default boolean hasSpace(String registrationNumber) throws IlleagalRegistrationNumberFormat {
         PatternCheck.check(registrationNumber);
-        for (Space space : getSpaces()) {
+        for (Space space : this) {
             if (space.getVehicle().getRegistrationNumber().equals(registrationNumber))
                 return true;
         }
@@ -85,7 +85,7 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>{
     default int getSpaces(Person person) {
         Objects.requireNonNull(person, "person - null");
         int count = 0;
-        for (Space space : getSpaces()) {
+        for (Space space : this) {
             if (space.getPerson().equals(person)) count++;
         }
         return count;
@@ -95,7 +95,7 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>{
         Vehicle[] vehicles = new Vehicle[vehiclesQuantity()];
         int index = 0;
 
-        for (Space space : getSpaces()) {
+        for (Space space : this) {
             if (!space.isEmpty()) {
                 vehicles[index] = space.getVehicle();
                 index++;
@@ -111,7 +111,7 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>{
     default int indexOf(String registrationNumber) throws IlleagalRegistrationNumberFormat {
         PatternCheck.check(registrationNumber);
         int index = 0;
-        for (Space space : getSpaces()) {
+        for (Space space : this) {
             if (space.getVehicle().getRegistrationNumber().equals(registrationNumber))
                 return index;
             index++;
@@ -122,7 +122,7 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>{
     default Space[] getSpaces(VehicleTypes type) {
         Space[] spaces = new Space[vehiclesQuantity(type)];
         int index = 0;
-        for (Space space : getSpaces()) {
+        for (Space space : this) {
             if (space.getVehicle().getType().equals(type)) {
                 spaces[index] = space;
                 index++;
@@ -134,7 +134,7 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>{
     default Space[] getEmptySpaces() {
         Space[] spaces = new Space[size() - vehiclesQuantity()];
         int index = 0;
-        for (Space space : getSpaces()) {
+        for (Space space : this) {
             if (space.isEmpty()) {
                 spaces[index] = space;
                 index++;

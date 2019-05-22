@@ -8,7 +8,7 @@ import java.util.Objects;
 public class RentedSpacesFloor implements Floor, Cloneable {
 
     private Node head = new Node(null);
-    private Integer size = 0;
+    private int size = 0;
 
     public RentedSpacesFloor(Space[] spaces) {
         for (int i = 0; i < spaces.length; i++) {
@@ -17,27 +17,24 @@ public class RentedSpacesFloor implements Floor, Cloneable {
     }
 
     private class SpaceIterator implements Iterator<Space>{
-        Space[] spaceIter;
         int indexPosition = 0;
-
-        public SpaceIterator(Space[] spaces) {
-            this.spaceIter = spaces;
-        }
+        Node node = head.next;
 
         public boolean hasNext() {
-            return size >= indexPosition + 1;
+            return size < indexPosition;
         }
 
         public Space next() {
             if (!hasNext()) throw new NoSuchElementException();
-            Space spaceNext = spaceIter[indexPosition];
+            Node nextNode = node;
             indexPosition++;
-            return spaceNext;
+            node = node.next;
+            return nextNode.value;
         }
     }
 
     public Iterator<Space> iterator() {
-        return new SpaceIterator(getSpaces());
+        return new SpaceIterator();
     }
 
     private boolean addLast(Node node) {
@@ -191,7 +188,7 @@ public class RentedSpacesFloor implements Floor, Cloneable {
     }
 
     public int compareTo(Floor floor) {
-        return this.size.compareTo(floor.size());
+        return Integer.compare(size, floor.size());
     }
 
     public boolean hasRentedSpace() {

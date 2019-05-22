@@ -9,7 +9,7 @@ import java.util.Objects;
 
 public class OwnersFloor implements Floor, Cloneable {
 
-    private Integer size;
+    private int size;
     private Space[] spaces;
     private static final int CAPACITY_DEFAULT = 16;
 
@@ -29,27 +29,22 @@ public class OwnersFloor implements Floor, Cloneable {
     }
 
     private class SpaceIterator implements java.util.Iterator<Space>{
-        Space[] spaceIter;
         int indexPosition = 0;
 
-        public SpaceIterator(Space[] spaces) {
-            this.spaceIter = spaces;
-        }
-
         public boolean hasNext() {
-            return size >= indexPosition + 1;
+            return size < indexPosition;
         }
 
         public Space next() {
             if (!this.hasNext()) throw new NoSuchElementException();
-            Space nextSpace = spaceIter[indexPosition];
+            Space nextSpace = spaces[indexPosition];
             this.indexPosition++;
             return nextSpace;
         }
     }
 
     public Iterator<Space> iterator() {
-        return new SpaceIterator(spaces);
+        return new SpaceIterator();
     }
 
     public String toString() {
@@ -99,7 +94,7 @@ public class OwnersFloor implements Floor, Cloneable {
     }
 
     public int compareTo(Floor floor) {
-        return this.size.compareTo(floor.size());
+        return Integer.compare(size, floor.size());
     }
 
     public Space[] increase (Space[] spaces) {
