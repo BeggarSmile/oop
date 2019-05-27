@@ -1,11 +1,51 @@
 package model;
 
 import java.time.LocalDate;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Objects;
+import java.util.*;
 
-public interface Floor extends Comparable<Floor>, Iterable<Space>{
+public interface Floor extends Comparable<Floor>, Iterable<Space>, Collection<Space> {
+
+    default boolean isEmpty() {
+        return size() == 0;
+    }
+
+    default boolean addAll(Collection<? extends Space> collection) {
+        Object[] spaces = collection.toArray();
+        for (int i = 0; i < collection.size(); i++) {
+            add((Space) spaces[i]);
+        }
+        return true;
+    }
+
+    default boolean removeAll(Collection<?> collection) {
+        boolean flags = false;
+        Object[] spaces = collection.toArray();
+        for (int i = 0; i < collection.size(); i++) {
+            if (contains(spaces[i])) {
+                remove(spaces[i]);
+                flags = true;
+            }
+        }
+        return flags;
+    }
+
+    default boolean retainAll(Collection<?> collection) {
+        boolean flags = false;
+        Object[] spaces = collection.toArray();
+        for (int i = 0; i < collection.size(); i++) {
+            if (!contains(spaces[i])) {
+                remove(spaces[i]);
+                flags = true;
+            }
+        }
+        return flags;
+    }
+
+    default void clear() {
+        for (int i = 0; i < size(); i++) {
+            remove(0);
+        }
+    }
 
     String toString();
 
@@ -17,11 +57,11 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>{
 
     default LocalDate nearestRentEndsDate() {
         LocalDate minDate = null;
-        for (Space space : this) {
+        for (Object space : this.toArray()) {
             if (space instanceof RentedSpace) {
-                if (minDate == null) minDate = space.getSinceDate();
-                else if (minDate.isBefore(space.getSinceDate()))
-                    minDate = space.getSinceDate();
+                if (minDate == null) minDate = ((Space)space).getSinceDate();
+                else if (minDate.isBefore(((Space)space).getSinceDate()))
+                    minDate = ((Space)space).getSinceDate();
             }
         }
         if (minDate == null) throw new NoSuchElementException();
@@ -31,10 +71,10 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>{
     default Space spaceWithNearestRentEndsDate() {
         LocalDate minDate = nearestRentEndsDate();
 
-        for (Space space : this) {
+        for (Object space : this.toArray()) {
             if (space instanceof RentedSpace)
-                if (space.getSinceDate().isEqual(minDate))
-                    return space;
+                if (((Space)space).getSinceDate().isEqual(minDate))
+                    return ((Space)space);
         }
 
         throw new NoSuchElementException();
@@ -48,9 +88,9 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>{
 
     default Space get(String registrationNumber) throws IlleagalRegistrationNumberFormat{
         PatternCheck.check(registrationNumber);
-        for (Space space : this) {
-            if (space.getVehicle().getRegistrationNumber().equals(registrationNumber))
-                return space;
+        for (Object space : this.toArray()) {
+            if (((Space)space).getVehicle().getRegistrationNumber().equals(registrationNumber))
+                return ((Space)space);
         }
         throw new NoSuchElementException();
     }
@@ -59,8 +99,8 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>{
 
     default boolean hasSpace(String registrationNumber) throws IlleagalRegistrationNumberFormat {
         PatternCheck.check(registrationNumber);
-        for (Space space : this) {
-            if (space.getVehicle().getRegistrationNumber().equals(registrationNumber))
+        for (Object space : this.toArray()) {
+            if (((Space)space).getVehicle().getRegistrationNumber().equals(registrationNumber))
                 return true;
         }
         return false;
@@ -76,29 +116,27 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>{
         throw new NoSuchElementException();
     }
 
-    boolean remove(Space space) throws IlleagalRegistrationNumberFormat;
+    boolean remove(Object object);
 
     int size();
 
-    Space[] getSpaces();
+    Object[] toArray();
 
     default int getSpaces(Person person) {
         Objects.requireNonNull(person, "person - null");
         int count = 0;
-        for (Space space : this) {
-            if (space.getPerson().equals(person)) count++;
+        for (Object space : this.toArray()) {
+            if (((Space)space).getPerson().equals(person)) count++;
         }
         return count;
     }
 
-    default Vehicle[] getVehicles() {
-        Vehicle[] vehicles = new Vehicle[vehiclesQuantity()];
-        int index = 0;
+    default Collection<Vehicle> getVehicles() {
+        ArrayList<Vehicle> vehicles = new ArrayList<>();
 
-        for (Space space : this) {
-            if (!space.isEmpty()) {
-                vehicles[index] = space.getVehicle();
-                index++;
+        for (Object space : this.toArray()) {
+            if (!((Space)space).isEmpty()) {
+                vehicles.add(((Space)space).getVehicle());
             }
         }
         return vehicles;
@@ -111,33 +149,29 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>{
     default int indexOf(String registrationNumber) throws IlleagalRegistrationNumberFormat {
         PatternCheck.check(registrationNumber);
         int index = 0;
-        for (Space space : this) {
-            if (space.getVehicle().getRegistrationNumber().equals(registrationNumber))
+        for (Object space : this.toArray()) {
+            if (((Space)space).getVehicle().getRegistrationNumber().equals(registrationNumber))
                 return index;
             index++;
         }
         return -1;
     }
 
-    default Space[] getSpaces(VehicleTypes type) {
-        Space[] spaces = new Space[vehiclesQuantity(type)];
-        int index = 0;
-        for (Space space : this) {
-            if (space.getVehicle().getType().equals(type)) {
-                spaces[index] = space;
-                index++;
+    default List<Space> getSpaces(VehicleTypes type) {
+        ArrayList<Space> spaces = new ArrayList<>();
+        for (Object space : this.toArray()) {
+            if (((Space)space).getVehicle().getType().equals(type)) {
+                spaces.add((Space)space);
             }
         }
         return spaces;
     }
 
-    default Space[] getEmptySpaces() {
-        Space[] spaces = new Space[size() - vehiclesQuantity()];
-        int index = 0;
-        for (Space space : this) {
-            if (space.isEmpty()) {
-                spaces[index] = space;
-                index++;
+    default Deque<Space> getEmptySpaces() {
+        LinkedList<Space> spaces = new LinkedList<>();
+        for (Object space : this.toArray()) {
+            if (((Space)space).isEmpty()) {
+                spaces.add((Space)space);
             }
         }
         return spaces;

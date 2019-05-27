@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -14,6 +15,36 @@ public class RentedSpacesFloor implements Floor, Cloneable {
         for (int i = 0; i < spaces.length; i++) {
             addLast(new Node(spaces[i]));
         }
+    }
+
+    public boolean contains(Object object) {
+        Node node = head;
+        for (int i = 0; i < size; i++) {
+            node = node.next;
+            if (node.value == object) return true;
+        }
+        return false;
+    }
+
+    public <T> T[] toArray(T[] a) {
+        return null;
+    }
+
+    public boolean containsAll(Collection<?> collection) {
+        boolean flags = true;
+        Object[] colSpaces = collection.toArray();
+        Object[] spaces = toArray();
+        for (int i = 0; i < size; i++) {
+            if (!flags) return false;
+            flags = false;
+            for (int j = 0; j < collection.size(); j++) {
+                if (spaces[i] == colSpaces[j]) {
+                    flags = true;
+                    break;
+                }
+            }
+        }
+        return true;
     }
 
     private class SpaceIterator implements Iterator<Space>{
@@ -173,7 +204,6 @@ public class RentedSpacesFloor implements Floor, Cloneable {
         return true;
     }
 
-    //todo протесть - done
     public Object clone() throws CloneNotSupportedException{
         RentedSpacesFloor clone = (RentedSpacesFloor)super.clone();
         clone.head = head.clone();
@@ -266,13 +296,13 @@ public class RentedSpacesFloor implements Floor, Cloneable {
         return removeNode(index);
     }
 
-    public boolean remove(Space space) throws IlleagalRegistrationNumberFormat {
+    public boolean remove(Object object)  {
         //todo space.equals() - done
         Node node = head;
 
         for (int i = 0; i < size; i++) {
             node = node.next;
-            if (node.value.equals(space)) {
+            if (node.value.equals(object)) {
                 remove(i);
                 return true;
             }
@@ -284,7 +314,7 @@ public class RentedSpacesFloor implements Floor, Cloneable {
         return size;
     }
 
-    public Space[] getSpaces() {
+    public Object[] toArray() {
         Space[] spaces = new Space[size];
         Node node = head;
 

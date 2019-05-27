@@ -1,9 +1,6 @@
 package model;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class Parking implements Iterable<Floor>{
@@ -129,23 +126,15 @@ public class Parking implements Iterable<Floor>{
         return newFloors;
     }
 
-    public Floor[] getFloors(Person person) {
+    public Set<Floor> getFloors(Person person) {
         // Исключение isNull
         Objects.requireNonNull(person, "person - null");
 
-        int count = 0;
-
-        for (Floor floor : floors) {
-            if (floor.getSpaces(person) != 0) count++;
-        }
-
-        Floor[] newFloors = new Floor[count];
-        count = 0;
+        HashSet<Floor> newFloors = new HashSet<>();
 
         for (int i = 0; i < size; i++) {
             if (floors[i].getSpaces(person) != 0){
-                System.arraycopy(floors, i, newFloors, count, 1);
-                count++;
+                newFloors.add(floors[i]);
             }
         }
 
@@ -158,20 +147,13 @@ public class Parking implements Iterable<Floor>{
         return newFloors;
     }
 
-    public Vehicle[] getVehicles () {
-        int vehiclesQuantity = 0;
-        for (Floor floor : floors) {
-            vehiclesQuantity += floor.vehiclesQuantity();
-        }
-
-        Vehicle[] allVehicles = new Vehicle[vehiclesQuantity];
-        vehiclesQuantity = 0;
-        Vehicle[] vehicles;
+    public Collection<Vehicle> getVehicles () {
+        ArrayList<Vehicle> allVehicles = new ArrayList<>();
+        Collection<Vehicle> vehicles;
 
         for (Floor floor : floors) {
             vehicles = floor.getVehicles();
-            System.arraycopy(vehicles, 0, allVehicles, vehiclesQuantity, vehicles.length);
-            vehiclesQuantity += vehicles.length;
+            allVehicles.addAll(vehicles);
         }
 
         return allVehicles;

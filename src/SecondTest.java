@@ -52,7 +52,10 @@ public class SecondTest{
         System.out.println(Park.getFloors()[0].remove(0));
         System.out.println(Park.getFloors()[0].get(0).getPerson().getFirstName());
         System.out.println(vehicle_1.toString());
-        System.out.println(ownersFloor_2.compareTo(ownersFloor_2));
+        System.out.println(ownersFloor_2.getVehicles());
+        System.out.println(ownersFloor_2.indexOf("A111AA11"));
+        System.out.println(Park.getFloors(person_1));
+        System.out.println(ownersFloor_2.contains(rentedSpace_1));
 
     }
 }

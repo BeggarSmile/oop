@@ -2,10 +2,7 @@ package model;
 
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Objects;
+import java.util.*;
 
 public class OwnersFloor implements Floor, Cloneable {
 
@@ -26,6 +23,33 @@ public class OwnersFloor implements Floor, Cloneable {
         Space[] newSpaces = new Space[size * 2];
         System.arraycopy(spaces,0,newSpaces ,0, size);
         this.spaces = newSpaces;
+    }
+
+    //todo об этом тоже не забудь спросить
+    public boolean contains(Object object) {
+        for (int i = 0; i < size; i++) {
+            if (spaces[i] == object) return true;
+        }
+        return false;
+    }
+
+    //todo Обязательно спроси, и на листах такая же хрень
+    public <T> T[] toArray(T[] a) {
+        return null;
+    }
+
+    public boolean containsAll(Collection<?> collection) {
+        Object[] spaces = collection.toArray();
+        boolean flags = true;
+
+        for (int i = 0; i < size; i++) {
+            if (!flags) return false;
+            flags = false;
+            for (int j = 0; j < collection.size(); j++) {
+                if (this.spaces[i] == spaces[j]) flags = true;
+            }
+        }
+        return true;
     }
 
     private class SpaceIterator implements java.util.Iterator<Space>{
@@ -172,7 +196,7 @@ public class OwnersFloor implements Floor, Cloneable {
         return spaces[index];
     }
 
-    public int getIndex (Space space) throws IlleagalRegistrationNumberFormat {
+    public int getIndex (Space space) {
         // Исключение isNull
         Objects.requireNonNull(space, "space - null");
         for (int i = 0; i < size; i++) {
@@ -205,11 +229,11 @@ public class OwnersFloor implements Floor, Cloneable {
         return space;
     }
 
-    public boolean remove (Space space) throws IlleagalRegistrationNumberFormat {
+    public boolean remove (Object object) {
         // Исключение isNull
-        Objects.requireNonNull(space, "space - null");
+        Objects.requireNonNull(object, "space - null");
          for (int i = 0; i < size; i++) {
-                if (space.equals(spaces[i])) {
+                if (object.equals(spaces[i])) {
                     remove(i);
                     return true;
                 }
@@ -221,7 +245,7 @@ public class OwnersFloor implements Floor, Cloneable {
         return size;
     }
 
-    public Space[] getSpaces () {
+    public Object[] toArray () {
         Space[] newSpace = new Space[size];
         System.arraycopy(spaces, 0, newSpace, 0, size);
         return newSpace;
