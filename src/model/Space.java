@@ -25,4 +25,6 @@ public interface Space {
 
     Space clone() throws CloneNotSupportedException;
 
+    boolean equals(Object object);
+
 }

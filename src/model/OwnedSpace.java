@@ -23,4 +23,13 @@ public class OwnedSpace extends AbstractSpace implements Cloneable {
         return (71 * super.hashCode());
     }
 
+    public boolean equals(Object object) {
+        OwnedSpace ownedSpace = (OwnedSpace)object;
+        return (ownedSpace instanceof OwnedSpace
+                && ownedSpace.getVehicle().equals(super.getVehicle())
+                && ownedSpace.getPerson().equals(super.getPerson())
+                && ownedSpace.getSinceDate().equals(super.getSinceDate())
+                && ownedSpace.getPeriod().equals(super.getPeriod()));
+    }
+
 }
