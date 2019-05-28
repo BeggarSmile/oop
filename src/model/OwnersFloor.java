@@ -28,7 +28,7 @@ public class OwnersFloor implements Floor, Cloneable {
     //todo об этом тоже не забудь спросить
     public boolean contains(Object object) {
         for (int i = 0; i < size; i++) {
-            if (spaces[i] == object) return true;
+            if (spaces[i] == object) return true; //todo equals
         }
         return false;
     }
@@ -39,9 +39,8 @@ public class OwnersFloor implements Floor, Cloneable {
     }
 
     public boolean containsAll(Collection<?> collection) {
-        Object[] spaces = collection.toArray();
         boolean flags = true;
-
+        //todo foreach + contains
         for (int i = 0; i < size; i++) {
             if (!flags) return false;
             flags = false;
@@ -118,7 +117,7 @@ public class OwnersFloor implements Floor, Cloneable {
     }
 
     public int compareTo(Floor floor) {
-        return Integer.compare(size, floor.size());
+        return size - floor.size();
     }
 
     public Space[] increase (Space[] spaces) {
@@ -245,7 +244,7 @@ public class OwnersFloor implements Floor, Cloneable {
         return size;
     }
 
-    public Object[] toArray () {
+    public Space[] toArray () {
         Space[] newSpace = new Space[size];
         System.arraycopy(spaces, 0, newSpace, 0, size);
         return newSpace;

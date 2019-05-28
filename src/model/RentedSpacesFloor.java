@@ -1,10 +1,7 @@
 package model;
 
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Objects;
+import java.util.*;
 
 public class RentedSpacesFloor implements Floor, Cloneable {
 
@@ -21,19 +18,20 @@ public class RentedSpacesFloor implements Floor, Cloneable {
         Node node = head;
         for (int i = 0; i < size; i++) {
             node = node.next;
-            if (node.value == object) return true;
+            if (node.value.equals(object)) return true;
         }
         return false;
     }
 
     public <T> T[] toArray(T[] a) {
+        ArrayList list = new ArrayList();
+        list.toArray(a); // todo подсмотреть можешь тут
         return null;
     }
 
     public boolean containsAll(Collection<?> collection) {
         boolean flags = true;
-        Object[] colSpaces = collection.toArray();
-        Object[] spaces = toArray();
+//todo foreach - и внутри один метод - contains
         for (int i = 0; i < size; i++) {
             if (!flags) return false;
             flags = false;
@@ -218,7 +216,7 @@ public class RentedSpacesFloor implements Floor, Cloneable {
     }
 
     public int compareTo(Floor floor) {
-        return Integer.compare(size, floor.size());
+        return size - floor.size();
     }
 
     public boolean hasRentedSpace() {
@@ -314,7 +312,7 @@ public class RentedSpacesFloor implements Floor, Cloneable {
         return size;
     }
 
-    public Object[] toArray() {
+    public Space[] toArray() {
         Space[] spaces = new Space[size];
         Node node = head;
 

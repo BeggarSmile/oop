@@ -3,6 +3,7 @@ package model;
 import java.time.LocalDate;
 import java.util.*;
 
+//todo фигня с кастами
 public interface Floor extends Comparable<Floor>, Iterable<Space>, Collection<Space> {
 
     default boolean isEmpty() {
@@ -10,14 +11,14 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>, Collection<Sp
     }
 
     default boolean addAll(Collection<? extends Space> collection) {
-        Object[] spaces = collection.toArray();
-        for (int i = 0; i < collection.size(); i++) {
-            add((Space) spaces[i]);
+        for (Space space : collection) {
+            add(space);
         }
         return true;
     }
 
     default boolean removeAll(Collection<?> collection) {
+        //todo реализацию надо в классах делать (с целью эффективности, чтоб удалить все элементы за один проход по своей коллекции)
         boolean flags = false;
         Object[] spaces = collection.toArray();
         for (int i = 0; i < collection.size(); i++) {
@@ -30,6 +31,7 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>, Collection<Sp
     }
 
     default boolean retainAll(Collection<?> collection) {
+        //todo аналогино removeALL
         boolean flags = false;
         Object[] spaces = collection.toArray();
         for (int i = 0; i < collection.size(); i++) {
@@ -42,6 +44,7 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>, Collection<Sp
     }
 
     default void clear() {
+        //todo в OwnersFloor переопредели метод, чтоб не сдвигать (опять эффективность)
         for (int i = 0; i < size(); i++) {
             remove(0);
         }
@@ -56,10 +59,14 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>, Collection<Sp
     Object clone() throws CloneNotSupportedException;
 
     default LocalDate nearestRentEndsDate() {
+        return spaceWithNearestRentEndsDate().getSinceDate();
+
+        //todo эта фигня в следующем методе
         LocalDate minDate = null;
-        for (Object space : this.toArray()) {
+        for (Space space : this) {
             if (space instanceof RentedSpace) {
-                if (minDate == null) minDate = ((Space)space).getSinceDate();
+                //todo убери касты
+                if (minDate == null) minDate = space.getSinceDate();
                 else if (minDate.isBefore(((Space)space).getSinceDate()))
                     minDate = ((Space)space).getSinceDate();
             }
@@ -69,15 +76,8 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>, Collection<Sp
     }
 
     default Space spaceWithNearestRentEndsDate() {
-        LocalDate minDate = nearestRentEndsDate();
 
-        for (Object space : this.toArray()) {
-            if (space instanceof RentedSpace)
-                if (((Space)space).getSinceDate().isEqual(minDate))
-                    return ((Space)space);
-        }
 
-        throw new NoSuchElementException();
     }
 
     boolean add(Space space);
@@ -88,7 +88,7 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>, Collection<Sp
 
     default Space get(String registrationNumber) throws IlleagalRegistrationNumberFormat{
         PatternCheck.check(registrationNumber);
-        for (Object space : this.toArray()) {
+        for (Object space : this) {
             if (((Space)space).getVehicle().getRegistrationNumber().equals(registrationNumber))
                 return ((Space)space);
         }
@@ -99,7 +99,7 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>, Collection<Sp
 
     default boolean hasSpace(String registrationNumber) throws IlleagalRegistrationNumberFormat {
         PatternCheck.check(registrationNumber);
-        for (Object space : this.toArray()) {
+        for (Object space : this) {
             if (((Space)space).getVehicle().getRegistrationNumber().equals(registrationNumber))
                 return true;
         }
@@ -120,12 +120,10 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>, Collection<Sp
 
     int size();
 
-    Object[] toArray();
-
     default int getSpaces(Person person) {
         Objects.requireNonNull(person, "person - null");
         int count = 0;
-        for (Object space : this.toArray()) {
+        for (Object space : this) {
             if (((Space)space).getPerson().equals(person)) count++;
         }
         return count;
@@ -134,7 +132,7 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>, Collection<Sp
     default Collection<Vehicle> getVehicles() {
         ArrayList<Vehicle> vehicles = new ArrayList<>();
 
-        for (Object space : this.toArray()) {
+        for (Object space : this) {
             if (!((Space)space).isEmpty()) {
                 vehicles.add(((Space)space).getVehicle());
             }
@@ -145,11 +143,12 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>, Collection<Sp
     int vehiclesQuantity();
 
     int vehiclesQuantity(VehicleTypes type);
+    //todo можно сделать default
 
     default int indexOf(String registrationNumber) throws IlleagalRegistrationNumberFormat {
         PatternCheck.check(registrationNumber);
         int index = 0;
-        for (Object space : this.toArray()) {
+        for (Object space : this) {
             if (((Space)space).getVehicle().getRegistrationNumber().equals(registrationNumber))
                 return index;
             index++;
@@ -159,7 +158,7 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>, Collection<Sp
 
     default List<Space> getSpaces(VehicleTypes type) {
         ArrayList<Space> spaces = new ArrayList<>();
-        for (Object space : this.toArray()) {
+        for (Object space : this) {
             if (((Space)space).getVehicle().getType().equals(type)) {
                 spaces.add((Space)space);
             }
@@ -169,7 +168,7 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>, Collection<Sp
 
     default Deque<Space> getEmptySpaces() {
         LinkedList<Space> spaces = new LinkedList<>();
-        for (Object space : this.toArray()) {
+        for (Object space : this) {
             if (((Space)space).isEmpty()) {
                 spaces.add((Space)space);
             }
