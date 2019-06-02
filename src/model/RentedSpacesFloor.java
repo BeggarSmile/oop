@@ -24,25 +24,60 @@ public class RentedSpacesFloor implements Floor, Cloneable {
     }
 
     public <T> T[] toArray(T[] a) {
-        ArrayList list = new ArrayList();
-        list.toArray(a); // todo подсмотреть можешь тут
-        return null;
+        Space[] elementData = toArray();
+        if (a.length < size)
+            // Make a new array of a's runtime type, but my contents:
+            return (T[]) Arrays.copyOf(elementData, size, a.getClass());
+        System.arraycopy(elementData, 0, a, 0, size);
+        if (a.length > size)
+            a[size] = null;
+        return a;
     }
 
     public boolean containsAll(Collection<?> collection) {
         boolean flags = true;
-//todo foreach - и внутри один метод - contains
-        for (int i = 0; i < size; i++) {
-            if (!flags) return false;
-            flags = false;
-            for (int j = 0; j < collection.size(); j++) {
-                if (spaces[i] == colSpaces[j]) {
+//todo foreach - и внутри один метод - contains - done
+        for (Object obj : collection)
+            if (!contains(obj)) return false;
+        return true;
+    }
+
+    public boolean removeAll(Collection<?> collection) {
+        boolean flags = false;
+
+        for (Object obj : collection) {
+            Node node = head;
+            for (int i = 0; i < size; i++) {
+                node = node.next;
+                if (node.value.equals(obj)) {
+                    node.previous.next = node.next;
+                    node.next.previous = node.previous;
+                    node.previous = null;
+                    node.next = null;
                     flags = true;
-                    break;
                 }
             }
         }
-        return true;
+        return flags;
+    }
+
+    public boolean retainAll(Collection<?> collection) {
+        boolean flags = false;
+
+        for (Object obj : collection) {
+            Node node = head;
+            for (int i = 0; i < size; i++) {
+                node = node.next;
+                if (!node.value.equals(obj)) {
+                    node.previous.next = node.next;
+                    node.next.previous = node.previous;
+                    node.previous = null;
+                    node.next = null;
+                    flags = true;
+                }
+            }
+        }
+        return flags;
     }
 
     private class SpaceIterator implements Iterator<Space>{
@@ -187,7 +222,7 @@ public class RentedSpacesFloor implements Floor, Cloneable {
     }
 
     public boolean equals(Object object) {
-        if (!(object instanceof RentedSpacesFloor && (((RentedSpacesFloor) object).size == size)))
+        if (!(object instanceof RentedSpacesFloor || (((RentedSpacesFloor) object).size != size)))
         {
             return false;
         }

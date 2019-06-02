@@ -19,10 +19,7 @@ public class Parking implements Iterable<Floor>{
 
     private class ParkingIterator implements Iterator<Floor> {
         int indexPosition = 0;
-        //todo убери массив
-        public ParkingIterator(Floor[] floors) {
-            this.floorsIter = floors;
-        }
+        //todo убери массив - done
 
         public boolean hasNext() {
             return size >= indexPosition + 1;
@@ -30,21 +27,21 @@ public class Parking implements Iterable<Floor>{
 
         public Floor next() {
             if (!hasNext()) throw new NoSuchElementException();
-            Floor nextFloor = floorsIter[indexPosition];
+            Floor nextFloor = floors[indexPosition];
             indexPosition++;
             return nextFloor;
         }
     }
 
     public Iterator<Floor> iterator() {
-        return new ParkingIterator(floors);
+        return new ParkingIterator();
     }
 
     public String toString() {
         StringBuilder strBuild = new StringBuilder("Floors (").append(size).append(" ): ");
-        //todo foreach
-        for (int i = 0; i < size; i++) {
-            strBuild.append('\n').append(floors[i].toString());
+        //todo foreach - done
+        for (Floor floor : floors) {
+            strBuild.append('\n').append(floor.toString());
         }
 
         return strBuild.toString();
@@ -130,10 +127,10 @@ public class Parking implements Iterable<Floor>{
         Objects.requireNonNull(person, "person - null");
 
         HashSet<Floor> newFloors = new HashSet<>();
-        //todo foreach
-        for (int i = 0; i < size; i++) {
-            if (floors[i].getSpaces(person) != 0){
-                newFloors.add(floors[i]);
+        //todo foreach - done
+        for (Floor floor : floors) {
+            if (floor.getSpaces(person) != 0){
+                newFloors.add(floor);
             }
         }
 
@@ -199,9 +196,9 @@ public class Parking implements Iterable<Floor>{
     public int emptySpacesQuantity() {
         int quantity = 0;
 
-        //todo во floor сделай метод emptySpacesQuantity() и вызывай его
+        //todo во floor сделай метод emptySpacesQuantity() и вызывай его - done
         for (Floor floor : floors) {
-            quantity += floor.size() - floor.vehiclesQuantity();
+            quantity += floor.emptySpacesQuantity();
         }
 
         return quantity;

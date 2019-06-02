@@ -25,30 +25,67 @@ public class OwnersFloor implements Floor, Cloneable {
         this.spaces = newSpaces;
     }
 
-    //todo об этом тоже не забудь спросить
+    //todo об этом тоже не забудь спросить - done
     public boolean contains(Object object) {
         for (int i = 0; i < size; i++) {
-            if (spaces[i] == object) return true; //todo equals
+            if (spaces[i].equals(object)) return true; //todo equals - done
         }
         return false;
     }
 
-    //todo Обязательно спроси, и на листах такая же хрень
+    //todo Обязательно спроси, и на листах такая же хрень - done
     public <T> T[] toArray(T[] a) {
-        return null;
+        Space[] elementData = toArray();
+        if (a.length < size)
+            // Make a new array of a's runtime type, but my contents:
+            return (T[]) Arrays.copyOf(elementData, size, a.getClass());
+        System.arraycopy(elementData, 0, a, 0, size);
+        if (a.length > size)
+            a[size] = null;
+        return a;
     }
 
     public boolean containsAll(Collection<?> collection) {
         boolean flags = true;
-        //todo foreach + contains
-        for (int i = 0; i < size; i++) {
-            if (!flags) return false;
-            flags = false;
-            for (int j = 0; j < collection.size(); j++) {
-                if (this.spaces[i] == spaces[j]) flags = true;
+        //todo foreach + contains - done
+        for (Object obj : collection)
+            if (!this.contains(obj)) return false;
+        return true;
+    }
+
+    public boolean removeAll(Collection<?> collection) {
+        int count = 0;
+        boolean flags = false;
+        for (Object obj : collection) {
+            for (int i = 0; i < size; i++) {
+                if (spaces[i].equals(obj)) {
+                    count++;
+                    flags = true;
+                }
+                else System.arraycopy(spaces, count + 1, spaces, i, size - i - count);
             }
         }
-        return true;
+        return flags;
+    }
+
+    public boolean retainAll(Collection<?> collection) {
+        boolean flags = false;
+        int count = 0;
+        for (Object obj : collection) {
+            for (int i = 0; i < size; i++) {
+                if (!spaces.equals(obj)) {
+                    count++;
+                    flags = true;
+                }
+                else System.arraycopy(spaces, count + 1, spaces, i, size - i - count);
+            }
+        }
+        return flags;
+    }
+
+    public void clear() {
+        for (Space space : spaces)
+            space = null;
     }
 
     private class SpaceIterator implements java.util.Iterator<Space>{
@@ -97,13 +134,13 @@ public class OwnersFloor implements Floor, Cloneable {
     }
 
     public boolean equals(Object object) {
-        if (!(object instanceof OwnersFloor && ((OwnersFloor) object).size == size)) {
+        if (!(object instanceof OwnersFloor || ((OwnersFloor) object).size != size)) {
             return false;
         }
-            for (int i = 0; i < size; i++) {
-                if (!((OwnersFloor) object).spaces[i].equals(spaces[i]))
-                    return false;
-            }
+        for (int i = 0; i < size; i++) {
+            if (!((OwnersFloor) object).spaces[i].equals(spaces[i]))
+                return false;
+        }
 
         return true;
     }

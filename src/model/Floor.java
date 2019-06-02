@@ -3,7 +3,7 @@ package model;
 import java.time.LocalDate;
 import java.util.*;
 
-//todo фигня с кастами
+//todo фигня с кастами - done
 public interface Floor extends Comparable<Floor>, Iterable<Space>, Collection<Space> {
 
     default boolean isEmpty() {
@@ -18,7 +18,7 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>, Collection<Sp
     }
 
     default boolean removeAll(Collection<?> collection) {
-        //todo реализацию надо в классах делать (с целью эффективности, чтоб удалить все элементы за один проход по своей коллекции)
+        //todo реализацию надо в классах делать (с целью эффективности, чтоб удалить все элементы за один проход по своей коллекции) - done
         boolean flags = false;
         Object[] spaces = collection.toArray();
         for (int i = 0; i < collection.size(); i++) {
@@ -31,7 +31,7 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>, Collection<Sp
     }
 
     default boolean retainAll(Collection<?> collection) {
-        //todo аналогино removeALL
+        //todo аналогино removeALL - done
         boolean flags = false;
         Object[] spaces = collection.toArray();
         for (int i = 0; i < collection.size(); i++) {
@@ -44,7 +44,7 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>, Collection<Sp
     }
 
     default void clear() {
-        //todo в OwnersFloor переопредели метод, чтоб не сдвигать (опять эффективность)
+        //todo в OwnersFloor переопредели метод, чтоб не сдвигать (опять эффективность) - done
         for (int i = 0; i < size(); i++) {
             remove(0);
         }
@@ -61,23 +61,22 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>, Collection<Sp
     default LocalDate nearestRentEndsDate() {
         return spaceWithNearestRentEndsDate().getSinceDate();
 
-        //todo эта фигня в следующем методе
-        LocalDate minDate = null;
+        //todo эта фигня в следующем методе - done
+                //todo убери касты - done
+    }
+
+    default Space spaceWithNearestRentEndsDate() {
+        Space minDate = null;
         for (Space space : this) {
             if (space instanceof RentedSpace) {
-                //todo убери касты
-                if (minDate == null) minDate = space.getSinceDate();
-                else if (minDate.isBefore(((Space)space).getSinceDate()))
-                    minDate = ((Space)space).getSinceDate();
+                //todo убери касты - done
+                if (minDate == null) minDate = space;
+                else if (minDate.getSinceDate().isBefore((space).getSinceDate()))
+                    minDate = space;
             }
         }
         if (minDate == null) throw new NoSuchElementException();
         return minDate;
-    }
-
-    default Space spaceWithNearestRentEndsDate() {
-
-
     }
 
     boolean add(Space space);
@@ -123,7 +122,7 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>, Collection<Sp
     default int getSpaces(Person person) {
         Objects.requireNonNull(person, "person - null");
         int count = 0;
-        for (Object space : this) {
+        for (Object space : toArray()) {
             if (((Space)space).getPerson().equals(person)) count++;
         }
         return count;
@@ -132,7 +131,7 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>, Collection<Sp
     default Collection<Vehicle> getVehicles() {
         ArrayList<Vehicle> vehicles = new ArrayList<>();
 
-        for (Object space : this) {
+        for (Object space : toArray()) {
             if (!((Space)space).isEmpty()) {
                 vehicles.add(((Space)space).getVehicle());
             }
@@ -143,7 +142,6 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>, Collection<Sp
     int vehiclesQuantity();
 
     int vehiclesQuantity(VehicleTypes type);
-    //todo можно сделать default
 
     default int indexOf(String registrationNumber) throws IlleagalRegistrationNumberFormat {
         PatternCheck.check(registrationNumber);
@@ -174,5 +172,9 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>, Collection<Sp
             }
         }
         return spaces;
+    }
+
+    default int emptySpacesQuantity() {
+        return size() - vehiclesQuantity();
     }
 }

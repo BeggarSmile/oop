@@ -23,12 +23,14 @@ public class RentedSpace extends AbstractSpace implements Cloneable {
 
 
     public boolean equals(Object object) {
-        //todo super.equals()
+        //todo super.equals() - done
         if (!(object instanceof RentedSpace))
                 return false;
         RentedSpace space = (RentedSpace) object;
-                return
-                space.getRentEndsDate().equals(rentEndsDate);
+                return space.getVehicle().equals(getVehicle()) &&
+                        space.getSinceDate().equals(getSinceDate()) &&
+                        space.getPerson().equals(getPerson()) &&
+                        space.rentEndsDate.equals(rentEndsDate);
                 //todo потесть
     }
 
