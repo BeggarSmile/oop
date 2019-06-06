@@ -19,10 +19,9 @@ public class Parking implements Iterable<Floor>{
 
     private class ParkingIterator implements Iterator<Floor> {
         int indexPosition = 0;
-        //todo убери массив - done
 
         public boolean hasNext() {
-            return size >= indexPosition + 1;
+            return indexPosition < size;
         }
 
         public Floor next() {
@@ -39,7 +38,6 @@ public class Parking implements Iterable<Floor>{
 
     public String toString() {
         StringBuilder strBuild = new StringBuilder("Floors (").append(size).append(" ): ");
-        //todo foreach - done
         for (Floor floor : floors) {
             strBuild.append('\n').append(floor.toString());
         }
@@ -123,11 +121,8 @@ public class Parking implements Iterable<Floor>{
     }
 
     public Set<Floor> getFloors(Person person) {
-        // Исключение isNull
         Objects.requireNonNull(person, "person - null");
-
         HashSet<Floor> newFloors = new HashSet<>();
-        //todo foreach - done
         for (Floor floor : floors) {
             if (floor.getSpaces(person) != 0){
                 newFloors.add(floor);
@@ -195,8 +190,6 @@ public class Parking implements Iterable<Floor>{
 
     public int emptySpacesQuantity() {
         int quantity = 0;
-
-        //todo во floor сделай метод emptySpacesQuantity() и вызывай его - done
         for (Floor floor : floors) {
             quantity += floor.emptySpacesQuantity();
         }

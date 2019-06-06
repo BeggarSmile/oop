@@ -25,21 +25,17 @@ public class OwnersFloor implements Floor, Cloneable {
         this.spaces = newSpaces;
     }
 
-    //todo об этом тоже не забудь спросить - done
     public boolean contains(Object object) {
         for (int i = 0; i < size; i++) {
-            if (spaces[i].equals(object)) return true; //todo equals - done
+            if (spaces[i].equals(object)) return true;
         }
         return false;
     }
 
-    //todo Обязательно спроси, и на листах такая же хрень - done
     public <T> T[] toArray(T[] a) {
-        Space[] elementData = toArray();
         if (a.length < size)
-            // Make a new array of a's runtime type, but my contents:
-            return (T[]) Arrays.copyOf(elementData, size, a.getClass());
-        System.arraycopy(elementData, 0, a, 0, size);
+            return (T[]) Arrays.copyOf(spaces, size, a.getClass());
+        System.arraycopy(spaces, 0, a, 0, size);
         if (a.length > size)
             a[size] = null;
         return a;
@@ -47,7 +43,6 @@ public class OwnersFloor implements Floor, Cloneable {
 
     public boolean containsAll(Collection<?> collection) {
         boolean flags = true;
-        //todo foreach + contains - done
         for (Object obj : collection)
             if (!this.contains(obj)) return false;
         return true;
@@ -56,36 +51,33 @@ public class OwnersFloor implements Floor, Cloneable {
     public boolean removeAll(Collection<?> collection) {
         int count = 0;
         boolean flags = false;
-        for (Object obj : collection) {
             for (int i = 0; i < size; i++) {
-                if (spaces[i].equals(obj)) {
+                if (collection.contains(spaces[i])) {
                     count++;
                     flags = true;
                 }
                 else System.arraycopy(spaces, count + 1, spaces, i, size - i - count);
             }
-        }
         return flags;
     }
 
     public boolean retainAll(Collection<?> collection) {
         boolean flags = false;
         int count = 0;
-        for (Object obj : collection) {
             for (int i = 0; i < size; i++) {
-                if (!spaces.equals(obj)) {
+                if (!collection.contains(spaces[i])) {
                     count++;
                     flags = true;
                 }
                 else System.arraycopy(spaces, count + 1, spaces, i, size - i - count);
             }
-        }
         return flags;
     }
 
     public void clear() {
         for (Space space : spaces)
             space = null;
+        size = 0;
     }
 
     private class SpaceIterator implements java.util.Iterator<Space>{

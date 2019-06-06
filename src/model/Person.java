@@ -26,7 +26,6 @@ public final class Person implements Cloneable{
     }
 
     public boolean equals(Object object) {
-        //todo красавчик, строки сравнивать на ==. - done
         return (object instanceof Person &&
                 ((Person) object).lastName.equals(lastName) &&
                 ((Person) object).firstName.equals(firstName));

@@ -24,7 +24,7 @@ public class OwnedSpace extends AbstractSpace implements Cloneable {
     }
 
     public boolean equals(Object object) {
-        return object instanceof OwnedSpace && super.equals(object); //todo протесть - done
+        return object instanceof OwnedSpace && super.equals(object);
     }
 
 }

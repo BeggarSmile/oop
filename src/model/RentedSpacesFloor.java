@@ -24,6 +24,7 @@ public class RentedSpacesFloor implements Floor, Cloneable {
     }
 
     public <T> T[] toArray(T[] a) {
+        //todo см у Фунтикова
         Space[] elementData = toArray();
         if (a.length < size)
             // Make a new array of a's runtime type, but my contents:
@@ -36,7 +37,6 @@ public class RentedSpacesFloor implements Floor, Cloneable {
 
     public boolean containsAll(Collection<?> collection) {
         boolean flags = true;
-//todo foreach - и внутри один метод - contains - done
         for (Object obj : collection)
             if (!contains(obj)) return false;
         return true;
@@ -63,12 +63,10 @@ public class RentedSpacesFloor implements Floor, Cloneable {
 
     public boolean retainAll(Collection<?> collection) {
         boolean flags = false;
-
-        for (Object obj : collection) {
             Node node = head;
             for (int i = 0; i < size; i++) {
                 node = node.next;
-                if (!node.value.equals(obj)) {
+                if (!collection.contains(node.value)) {
                     node.previous.next = node.next;
                     node.next.previous = node.previous;
                     node.previous = null;
@@ -76,7 +74,6 @@ public class RentedSpacesFloor implements Floor, Cloneable {
                     flags = true;
                 }
             }
-        }
         return flags;
     }
 
@@ -330,7 +327,6 @@ public class RentedSpacesFloor implements Floor, Cloneable {
     }
 
     public boolean remove(Object object)  {
-        //todo space.equals() - done
         Node node = head;
 
         for (int i = 0; i < size; i++) {

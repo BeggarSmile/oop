@@ -47,7 +47,6 @@ public final class Vehicle implements Cloneable {
     }
 
     public boolean equals(Object object) {
-        //todo красавчик, строки сравнивать на ==. - done
         if (this == object) return true;
         return (object instanceof Vehicle &&
                 ((Vehicle) object).maker.equals(maker) &&

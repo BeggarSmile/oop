@@ -3,7 +3,6 @@ package model;
 import java.time.LocalDate;
 import java.util.*;
 
-//todo фигня с кастами - done
 public interface Floor extends Comparable<Floor>, Iterable<Space>, Collection<Space> {
 
     default boolean isEmpty() {
@@ -18,33 +17,16 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>, Collection<Sp
     }
 
     default boolean removeAll(Collection<?> collection) {
-        //todo реализацию надо в классах делать (с целью эффективности, чтоб удалить все элементы за один проход по своей коллекции) - done
         boolean flags = false;
-        Object[] spaces = collection.toArray();
-        for (int i = 0; i < collection.size(); i++) {
-            if (contains(spaces[i])) {
-                remove(spaces[i]);
+        for (Object o : collection) {
+            if (remove(o))
                 flags = true;
-            }
         }
         return flags;
     }
 
-    default boolean retainAll(Collection<?> collection) {
-        //todo аналогино removeALL - done
-        boolean flags = false;
-        Object[] spaces = collection.toArray();
-        for (int i = 0; i < collection.size(); i++) {
-            if (!contains(spaces[i])) {
-                remove(spaces[i]);
-                flags = true;
-            }
-        }
-        return flags;
-    }
-
+    boolean retainAll(Collection<?> collection)
     default void clear() {
-        //todo в OwnersFloor переопредели метод, чтоб не сдвигать (опять эффективность) - done
         for (int i = 0; i < size(); i++) {
             remove(0);
         }
@@ -60,16 +42,12 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>, Collection<Sp
 
     default LocalDate nearestRentEndsDate() {
         return spaceWithNearestRentEndsDate().getSinceDate();
-
-        //todo эта фигня в следующем методе - done
-                //todo убери касты - done
     }
 
     default Space spaceWithNearestRentEndsDate() {
         Space minDate = null;
         for (Space space : this) {
             if (space instanceof RentedSpace) {
-                //todo убери касты - done
                 if (minDate == null) minDate = space;
                 else if (minDate.getSinceDate().isBefore((space).getSinceDate()))
                     minDate = space;
@@ -122,7 +100,7 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>, Collection<Sp
     default int getSpaces(Person person) {
         Objects.requireNonNull(person, "person - null");
         int count = 0;
-        for (Object space : toArray()) {
+        for (Object space : this) {
             if (((Space)space).getPerson().equals(person)) count++;
         }
         return count;
@@ -131,7 +109,7 @@ public interface Floor extends Comparable<Floor>, Iterable<Space>, Collection<Sp
     default Collection<Vehicle> getVehicles() {
         ArrayList<Vehicle> vehicles = new ArrayList<>();
 
-        for (Object space : toArray()) {
+        for (Object space : this) {
             if (!((Space)space).isEmpty()) {
                 vehicles.add(((Space)space).getVehicle());
             }
