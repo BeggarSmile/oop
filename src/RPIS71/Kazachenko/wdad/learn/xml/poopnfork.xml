@@ -50,7 +50,7 @@
     <date day="11" month="10" year="2019">
         <order>
             <officiant firstname="Yan" secondname="ivanov"/>
-            <item cost="" name=""/>
+            <item cost=""/>
             <item cost="33" name="name"/>
             <item cost="70" name="Котлетос"/>
             <totalcost>123</totalcost>
@@ -96,7 +96,7 @@
     <date day="13" month="10" year="2019">
         <order>
             <officiant firstname="Yan" secondname="ivanov"/>
-            <item cost="" name=""/>
+            <item cost=""/>
             <item cost="33" name="name"/>
             <item cost="70" name="Котлетос"/>
             <totalcost>103</totalcost>

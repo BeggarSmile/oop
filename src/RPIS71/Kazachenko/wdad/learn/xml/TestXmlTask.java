@@ -7,4 +7,3 @@ public class TestXmlTask {
         task.changeOfficiantName("fedor", "petrov", "patra", "kukrova");
     }
 }
-

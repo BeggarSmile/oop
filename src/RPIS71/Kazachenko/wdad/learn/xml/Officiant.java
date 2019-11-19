@@ -38,7 +38,7 @@ public class Officiant implements Serializable {
     public String toString() {
         StringBuilder sb = new StringBuilder("Officiant: ");
         if (firstName == null || firstName.isEmpty()) {
-            sb.append(Objects.requireNonNull(secondName, DEFAULT_NAME));
+            sb.append(Objects.requireNonNullElse(secondName, DEFAULT_NAME));
         } else sb.append(firstName).append(" ").append(secondName);
         return sb.toString();
     }

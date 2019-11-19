@@ -29,7 +29,7 @@ import java.util.Properties;
 
 public class PreferencesManager {
 
-    private static final String FILE_PATH = "src/RPIS71/Dmitriev/wdad/resources/configuration/appconfig.xml";
+    private static final String FILE_PATH = "src/RPIS71/Kazachenko/wdad/resources/configuration/appconfig.xml";
     public static final PreferencesManager INSTANCE = new PreferencesManager();
 
     private static Document document;
