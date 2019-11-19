@@ -2,34 +2,56 @@ package RPIS71.Kazachenko.wdad.learn.rmi;
 
 import RPIS71.Kazachenko.wdad.data.managers.PreferencesManager;
 import RPIS71.Kazachenko.wdad.learn.rmi.XmlDataManager;
-import RPIS71.Kazachenko.wdad.learn.rmi.XmlDataManagerImpl;
+import RPIS71.Kazachenko.wdad.learn.xml.NoSuchDayException;
+import RPIS71.Kazachenko.wdad.learn.xml.NoSuchOfficiantException;
+import RPIS71.Kazachenko.wdad.learn.xml.Officiant;
+import RPIS71.Kazachenko.wdad.learn.xml.Order;
 import RPIS71.Kazachenko.wdad.utils.PreferencesManagerConstants;
 
-import java.rmi.AlreadyBoundException;
-import java.rmi.Remote;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
+import java.time.LocalDate;
+import java.util.List;
 
-public class Server {
+public class Client {
 
-
-    public static void main(String[] args) throws RemoteException, AlreadyBoundException {
+    public static void main(String[] args) throws RemoteException, NoSuchDayException, NoSuchOfficiantException, NotBoundException {
         PreferencesManager manager = PreferencesManager.INSTANCE;
-        final String registryProperty = manager.getProperty(PreferencesManagerConstants.CREATE_REGISTRY);
-        if (registryProperty.equalsIgnoreCase("yes")) {
 
-            final int port = Integer.parseInt(manager.getProperty(PreferencesManagerConstants.REGISTRY_PORT));
-            final Registry registry = LocateRegistry.createRegistry(port);
-            final XmlDataManagerImpl service = new XmlDataManagerImpl();
-            final Remote stub = UnicastRemoteObject.exportObject(service, port);
+        final Registry registry = LocateRegistry.getRegistry(manager.getProperty(PreferencesManagerConstants.REGISTRY_ADDRESS),
+                Integer.parseInt(manager.getProperty(PreferencesManagerConstants.REGISTRY_PORT)));
 
-            registry.bind(PreferencesManagerConstants.BINDING_NAME, stub);
-            manager.addBindedObject(PreferencesManagerConstants.BINDING_NAME, XmlDataManager.class.getName());
-        } else {
-            throw new RemoteException("Registry is already created!");
-        }
+        final XmlDataManager service = (XmlDataManager) registry.lookup(PreferencesManagerConstants.BINDING_NAME);
 
+        LocalDate now = LocalDate.now();
+        Officiant officiant = new Officiant("Yan", "Ivanov");
+        Officiant newOfficiant = new Officiant("Billy", "Petrov");
+        LocalDate date;
+        int total;
+
+        List<Order> items = service.getOrders(now);
+        items.forEach(System.out::println);
+
+        //Yan Ivanov
+        total = service.earningsTotal(officiant, now);
+        System.out.println(total);
+
+        date = service.getLastOfficiantWorkDate(officiant);
+        System.out.println(date);
+
+        //Yan Ivano -> Billy Petrov
+        service.changeOfficiantName(officiant, newOfficiant);
+
+        //Billy Petrov
+        total = service.earningsTotal(newOfficiant, now);
+        System.out.println(total);
+
+        date = service.getLastOfficiantWorkDate(newOfficiant);
+        System.out.println(date);
+
+        //Remove day
+        service.removeDay(now);
     }
 }

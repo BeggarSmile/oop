@@ -1,9 +1,9 @@
-package RPIS71.XmlDataManager.java.wdad.learn.rmi;
+package RPIS71.Kazachenko.wdad.learn.rmi;
 
-import RPIS71.XmlDataManager.java.wdad.learn.xml.NoSuchDayException;
-import RPIS71.XmlDataManager.java.wdad.learn.xml.NoSuchOfficiantException;
-import RPIS71.XmlDataManager.java.wdad.learn.xml.Officiant;
-import RPIS71.XmlDataManager.java.wdad.learn.xml.Order;
+import RPIS71.Kazachenko.wdad.learn.xml.NoSuchDayException;
+import RPIS71.Kazachenko.wdad.learn.xml.NoSuchOfficiantException;
+import RPIS71.Kazachenko.wdad.learn.xml.Officiant;
+import RPIS71.Kazachenko.wdad.learn.xml.Order;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

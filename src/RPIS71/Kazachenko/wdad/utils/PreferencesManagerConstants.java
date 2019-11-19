@@ -8,5 +8,4 @@ public interface PreferencesManagerConstants {
     String USE_CODEBASE_ONLY = "appconfig.rmi.client.usecodebaseonly";
     String CLASS_PROVIDER = "appconfig.rmi.classprovider";
     String BINDING_NAME = "XmlDataManager";
-
 }
